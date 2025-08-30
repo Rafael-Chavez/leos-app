@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Study App</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .problem {
+            font-size: 4em;
+            margin: 30px 0;
+            color: #2d3748;
+            font-weight: bold;
+        }
+
+        .input-section {
+            margin: 30px 0;
+        }
+
+        #answer {
+            font-size: 3em;
+            padding: 15px;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            width: 200px;
+            text-align: center;
+            outline: none;
+        }
+
+        #answer:focus {
+            border-color: #4299e1;
+            box-shadow: 0 0 10px rgba(66, 153, 225, 0.3);
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #checkBtn {
+            background: #48bb78;
+            color: white;
+        }
+
+        #nextBtn {
+            background: #4299e1;
+            color: white;
+        }
+
+        #nextBtn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #nextBtn:disabled:hover {
+            transform: none;
+        }
+
+        .feedback {
+            font-size: 2em;
+            margin: 20px 0;
+            font-weight: bold;
+            min-height: 60px;
+        }
+
+        .correct {
+            color: #38a169;
+        }
+
+        .incorrect {
+            color: #e53e3e;
+        }
+
+        .score {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-top: 20px;
+        }
+
+        .stars {
+            font-size: 3em;
+            margin: 20px 0;
+        }
+
+        .progress {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .results-screen {
+            display: none;
+        }
+
+        .quiz-screen {
+            display: block;
+        }
+
+        .final-score {
+            font-size: 3em;
+            margin: 30px 0;
+            font-weight: bold;
+        }
+
+        .excellent {
+            color: #38a169;
+        }
+
+        .good {
+            color: #3182ce;
+        }
+
+        .needs-practice {
+            color: #e53e3e;
+        }
+
+        .restart-btn {
+            background: #805ad5;
+            color: white;
+            font-size: 1.5em;
+            padding: 15px 30px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-screen" id="quizScreen">
+            <h1>🧮 Math Quiz! 🧮</h1>
+            
+            <div class="progress" id="progress">Question 1 of 25</div>
+            
+            <div class="problem" id="problem">5 + 3 = ?</div>
+            
+            <div class="input-section">
+                <input type="number" id="answer" placeholder="?" autofocus>
+            </div>
+            
+            <div class="buttons">
+                <button id="checkBtn" onclick="checkAnswer()">Check ✓</button>
+                <button id="nextBtn" onclick="nextProblem()">Next →</button>
+            </div>
+            
+            <div class="feedback" id="feedback"></div>
+            <div class="stars" id="stars"></div>
+            
+            <div class="score">
+                <div>Correct: <span id="correct">0</span></div>
+                <div>Incorrect: <span id="incorrect">0</span></div>
+            </div>
+        </div>
+        
+        <div class="results-screen" id="resultsScreen">
+            <h1>🎉 Quiz Complete! 🎉</h1>
+            
+            <div class="final-score" id="finalScore">20/25</div>
+            
+            <div class="stars" id="finalStars">⭐⭐⭐</div>
+            
+            <div class="feedback" id="finalFeedback">Great job!</div>
+            
+            <div class="score">
+                <div>Correct Answers: <span id="finalCorrect">0</span></div>
+                <div>Incorrect Answers: <span id="finalIncorrect">0</span></div>
+                <div>Accuracy: <span id="accuracy">0%</span></div>
+            </div>
+            
+            <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        let currentProblem = {};
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let currentQuestion = 1;
+        let totalQuestions = 25;
+        let hasAnswered = false;
+        let quizComplete = false;
+
+        function generateProblem() {
+            const operations = ['+', '-'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            
+            let num1, num2, answer;
+            
+            if (operation === '+') {
+                // Addition: numbers 1-20, result up to 30
+                num1 = Math.floor(Math.random() * 20) + 1;
+                num2 = Math.floor(Math.random() * 20) + 1;
+                answer = num1 + num2;
+            } else {
+                // Subtraction: ensure positive result
+                num1 = Math.floor(Math.random() * 20) + 10; // 10-29
+                num2 = Math.floor(Math.random() * Math.min(num1, 10)) + 1; // 1 to min(num1, 10)
+                answer = num1 - num2;
+            }
+            
+            currentProblem = {
+                num1: num1,
+                num2: num2,
+                operation: operation,
+                answer: answer
+            };
+            
+            document.getElementById('problem').textContent = `${num1} ${operation} ${num2} = ?`;
+            document.getElementById('answer').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('stars').textContent = '';
+            document.getElementById('progress').textContent = `Question ${currentQuestion} of ${totalQuestions}`;
+            document.getElementById('answer').focus();
+            
+            hasAnswered = false;
+            updateNextButton();
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answer').value);
+            const feedbackEl = document.getElementById('feedback');
+            const starsEl = document.getElementById('stars');
+            
+            if (isNaN(userAnswer)) {
+                feedbackEl.textContent = 'Please enter a number!';
+                feedbackEl.className = 'feedback incorrect';
+                return;
+            }
+            
+            
+            if (userAnswer === currentProblem.answer) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Great job! 🎉';
+                feedbackEl.className = 'feedback correct';
+                starsEl.textContent = '⭐⭐⭐';
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                feedbackEl.textContent = `Not quite! The answer is ${currentProblem.answer}`;
+                feedbackEl.className = 'feedback incorrect';
+                starsEl.textContent = '💪 Try again!';
+            }
+            
+            hasAnswered = true;
+            updateNextButton();
+        }
+
+        function nextProblem() {
+            if (hasAnswered && !quizComplete) {
+                currentQuestion++;
+                
+                if (currentQuestion > totalQuestions) {
+                    showResults();
+                } else {
+                    generateProblem();
+                }
+            }
+        }
+        
+        function showResults() {
+            quizComplete = true;
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            
+            const accuracy = Math.round((correctCount / totalQuestions) * 100);
+            
+            document.getElementById('finalCorrect').textContent = correctCount;
+            document.getElementById('finalIncorrect').textContent = incorrectCount;
+            document.getElementById('finalScore').textContent = `${correctCount}/${totalQuestions}`;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            
+            // Set feedback based on performance
+            const finalFeedback = document.getElementById('finalFeedback');
+            const finalStars = document.getElementById('finalStars');
+            const finalScore = document.getElementById('finalScore');
+            
+            if (accuracy >= 80) {
+                finalFeedback.textContent = 'Excellent work! 🌟';
+                finalStars.textContent = '⭐⭐⭐⭐⭐';
+                finalScore.className = 'final-score excellent';
+            } else if (accuracy >= 60) {
+                finalFeedback.textContent = 'Good job! Keep practicing! 👍';
+                finalStars.textContent = '⭐⭐⭐⭐';
+                finalScore.className = 'final-score good';
+            } else {
+                finalFeedback.textContent = 'Keep practicing! You can do it! 💪';
+                finalStars.textContent = '⭐⭐⭐';
+                finalScore.className = 'final-score needs-practice';
+            }
+        }
+        
+        function restartQuiz() {
+            correctCount = 0;
+            incorrectCount = 0;
+            currentQuestion = 1;
+            quizComplete = false;
+            hasAnswered = false;
+            
+            document.getElementById('correct').textContent = '0';
+            document.getElementById('incorrect').textContent = '0';
+            
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            
+            generateProblem();
+        }
+        
+        function updateNextButton() {
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.disabled = !hasAnswered;
+            
+            // Change button text on last question
+            if (currentQuestion === totalQuestions && hasAnswered) {
+                nextBtn.textContent = 'Finish Quiz 🏁';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+        }
+
+        // Allow Enter key to check answer
+        document.getElementById('answer').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Monitor answer input to enable/disable next button
+        document.getElementById('answer').addEventListener('input', function() {
+            if (!hasAnswered) {
+                updateNextButton();
+            }
+        });
+        
+        // Generate first problem when page loads
+        generateProblem();
+        
+        // Initialize display
+        document.getElementById('correct').textContent = correctCount;
+        document.getElementById('incorrect').textContent = incorrectCount;
+    </script>
+</body>
+</html>

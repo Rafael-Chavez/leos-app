@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Flashcards</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .flashcard-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .chart-section {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 60px 40px;
+            margin: 30px 0;
+            font-size: 4em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.02);
+        }
+
+        .flashcard.flipped {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .controls {
+            margin: 30px 0;
+        }
+
+        button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .next-btn {
+            background: #4299e1;
+            color: white;
+        }
+
+        .shuffle-btn {
+            background: #805ad5;
+            color: white;
+        }
+
+        .progress {
+            font-size: 1.3em;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .multiplication-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .multiplication-table th,
+        .multiplication-table td {
+            border: 2px solid #e2e8f0;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .multiplication-table th {
+            background: #4299e1;
+            color: white;
+        }
+
+        .multiplication-table td {
+            background: #f7fafc;
+            color: #2d3748;
+        }
+
+        .table-0 { background-color: #fed7d7 !important; }
+        .table-1 { background-color: #bee3f8 !important; }
+        .table-2 { background-color: #c6f6d5 !important; }
+        .table-3 { background-color: #feebc8 !important; }
+
+        .legend {
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .flashcard {
+                font-size: 3em;
+                padding: 40px 20px;
+                min-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="hub.html" class="back-button">← Back to Hub</a>
+        <h1>🔢 Multiplication Flashcards 🔢</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="flashcard-section">
+            <div class="progress" id="progress">Card 1 of 44</div>
+            
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                3 × 7 = ?
+            </div>
+            
+            <div class="controls">
+                <button class="next-btn" onclick="nextCard()">Next Card →</button>
+                <button class="shuffle-btn" onclick="shuffleCards()">🔀 Shuffle</button>
+            </div>
+            
+            <div id="instructions" style="color: #718096; font-size: 1.2em; margin-top: 20px;">
+                Click the card to see the answer!
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-title">Multiplication Tables 0-3</div>
+            
+            <table class="multiplication-table">
+                <thead>
+                    <tr>
+                        <th>×</th>
+                        <th>0</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                        <th>9</th>
+                        <th>10</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>0</th>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                        <td class="table-0">0</td>
+                    </tr>
+                    <tr>
+                        <th>1</th>
+                        <td class="table-1">0</td>
+                        <td class="table-1">1</td>
+                        <td class="table-1">2</td>
+                        <td class="table-1">3</td>
+                        <td class="table-1">4</td>
+                        <td class="table-1">5</td>
+                        <td class="table-1">6</td>
+                        <td class="table-1">7</td>
+                        <td class="table-1">8</td>
+                        <td class="table-1">9</td>
+                        <td class="table-1">10</td>
+                    </tr>
+                    <tr>
+                        <th>2</th>
+                        <td class="table-2">0</td>
+                        <td class="table-2">2</td>
+                        <td class="table-2">4</td>
+                        <td class="table-2">6</td>
+                        <td class="table-2">8</td>
+                        <td class="table-2">10</td>
+                        <td class="table-2">12</td>
+                        <td class="table-2">14</td>
+                        <td class="table-2">16</td>
+                        <td class="table-2">18</td>
+                        <td class="table-2">20</td>
+                    </tr>
+                    <tr>
+                        <th>3</th>
+                        <td class="table-3">0</td>
+                        <td class="table-3">3</td>
+                        <td class="table-3">6</td>
+                        <td class="table-3">9</td>
+                        <td class="table-3">12</td>
+                        <td class="table-3">15</td>
+                        <td class="table-3">18</td>
+                        <td class="table-3">21</td>
+                        <td class="table-3">24</td>
+                        <td class="table-3">27</td>
+                        <td class="table-3">30</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color table-0"></div>
+                    <span>0 times table</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color table-1"></div>
+                    <span>1 times table</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color table-2"></div>
+                    <span>2 times table</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color table-3"></div>
+                    <span>3 times table</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let flashcards = [];
+        let currentCardIndex = 0;
+        let isFlipped = false;
+
+        // Generate all multiplication problems for 0, 1, 2, 3 times tables (0-10)
+        function generateFlashcards() {
+            flashcards = [];
+            for (let multiplier of [0, 1, 2, 3]) {
+                for (let multiplicand = 0; multiplicand <= 10; multiplicand++) {
+                    flashcards.push({
+                        question: `${multiplier} × ${multiplicand} = ?`,
+                        answer: multiplier * multiplicand
+                    });
+                }
+            }
+            shuffleCards();
+        }
+
+        function shuffleCards() {
+            for (let i = flashcards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+            }
+            currentCardIndex = 0;
+            showCard();
+        }
+
+        function showCard() {
+            if (flashcards.length === 0) return;
+            
+            const card = flashcards[currentCardIndex];
+            const flashcardEl = document.getElementById('flashcard');
+            const progressEl = document.getElementById('progress');
+            
+            flashcardEl.textContent = card.question;
+            flashcardEl.classList.remove('flipped');
+            progressEl.textContent = `Card ${currentCardIndex + 1} of ${flashcards.length}`;
+            
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            if (flashcards.length === 0) return;
+            
+            const card = flashcards[currentCardIndex];
+            const flashcardEl = document.getElementById('flashcard');
+            
+            if (!isFlipped) {
+                flashcardEl.textContent = `${card.question.replace(' = ?', '')} = ${card.answer}`;
+                flashcardEl.classList.add('flipped');
+                isFlipped = true;
+            } else {
+                flashcardEl.textContent = card.question;
+                flashcardEl.classList.remove('flipped');
+                isFlipped = false;
+            }
+        }
+
+        function nextCard() {
+            if (flashcards.length === 0) return;
+            
+            currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+            showCard();
+        }
+
+        // Initialize the app
+        generateFlashcards();
+        showCard();
+    </script>
+</body>
+</html>
