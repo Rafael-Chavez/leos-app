@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measurement</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .game-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .reference-section {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .game-modes {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .mode-btn.active {
+            background: #e53e3e;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mode-btn:not(.active) {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .problem-area {
+            min-height: 350px;
+            margin: 30px 0;
+        }
+
+        .measurement-display {
+            margin: 40px 0;
+        }
+
+        .object-display {
+            font-size: 8em;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .ruler-display {
+            background: #fef5e7;
+            border: 3px solid #ed8936;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .ruler {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to right, #fed7d7 0%, #fed7d7 50%, #bee3f8 50%, #bee3f8 100%);
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .ruler-marks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .ruler-mark {
+            width: 2px;
+            background: #2d3748;
+            height: 20px;
+            position: relative;
+        }
+
+        .ruler-mark.major {
+            height: 30px;
+            width: 3px;
+        }
+
+        .ruler-number {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .scale-display {
+            font-size: 6em;
+            margin: 20px 0;
+            background: #f0fff4;
+            border: 3px solid #38a169;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .container-display {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .container {
+            text-align: center;
+            font-size: 4em;
+        }
+
+        .container-label {
+            font-size: 0.4em;
+            color: #4a5568;
+            margin-top: 10px;
+        }
+
+        .question {
+            font-size: 2.2em;
+            color: #2d3748;
+            margin: 25px 0;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .answer-btn {
+            padding: 15px 10px;
+            font-size: 1.4em;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-btn:hover {
+            border-color: #e53e3e;
+            transform: scale(1.02);
+        }
+
+        .answer-btn.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #38a169;
+        }
+
+        .answer-btn.incorrect {
+            background: #e53e3e;
+            color: white;
+            border-color: #c53030;
+        }
+
+        .feedback {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 25px 0;
+            min-height: 60px;
+        }
+
+        .correct-feedback { color: #38a169; }
+        .incorrect-feedback { color: #e53e3e; }
+
+        .controls {
+            margin: 30px 0;
+        }
+
+        .next-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .score {
+            font-size: 1.3em;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .reference-title {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .measurement-ref {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f7fafc;
+            border-left: 5px solid #e53e3e;
+        }
+
+        .ref-category {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .ref-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .ref-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .ref-info {
+            flex: 1;
+        }
+
+        .ref-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .ref-value {
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+
+        .conversion-box {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .conversion-title {
+            font-weight: bold;
+            color: #234e52;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-modes {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mode-btn {
+                width: 180px;
+            }
+            
+            .object-display {
+                font-size: 6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="hub.html" class="back-button">← Back to Hub</a>
+        <h1>📏 Measurement 📏</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="game-section">
+            <div class="game-modes">
+                <button class="mode-btn active" onclick="setMode('length')">Length</button>
+                <button class="mode-btn" onclick="setMode('weight')">Weight</button>
+                <button class="mode-btn" onclick="setMode('capacity')">Capacity</button>
+                <button class="mode-btn" onclick="setMode('compare')">Compare</button>
+            </div>
+
+            <div class="problem-area" id="problemArea">
+                <div class="measurement-display" id="measurementDisplay">
+                    <div class="object-display">📏</div>
+                    <div class="ruler-display">
+                        <div class="ruler">
+                            <div class="ruler-marks" id="rulerMarks"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question">How long is this ruler?</div>
+                
+                <div class="answer-buttons" id="answerButtons">
+                    <button class="answer-btn" onclick="checkAnswer('6 inches')">6 inches</button>
+                    <button class="answer-btn" onclick="checkAnswer('12 inches')">12 inches</button>
+                    <button class="answer-btn" onclick="checkAnswer('8 inches')">8 inches</button>
+                    <button class="answer-btn" onclick="checkAnswer('10 inches')">10 inches</button>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="controls">
+                <button class="next-btn" onclick="nextProblem()">Next →</button>
+            </div>
+
+            <div class="score">
+                <div>Correct: <span id="correct">0</span></div>
+                <div>Incorrect: <span id="incorrect">0</span></div>
+                <div>Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+        <div class="reference-section">
+            <div class="reference-title">Measurement Guide</div>
+            
+            <div class="measurement-ref">
+                <div class="ref-category">📏 Length</div>
+                <div class="ref-item">
+                    <div class="ref-icon">📏</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Inch</div>
+                        <div class="ref-value">Small unit (about thumb width)</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-icon">📐</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Centimeter</div>
+                        <div class="ref-value">Small unit (about fingernail width)</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-icon">📏</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Foot</div>
+                        <div class="ref-value">12 inches (length of your foot)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="measurement-ref">
+                <div class="ref-category">⚖️ Weight</div>
+                <div class="ref-item">
+                    <div class="ref-icon">🟫</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Ounce</div>
+                        <div class="ref-value">Light (like a slice of bread)</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-icon">📦</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Pound</div>
+                        <div class="ref-value">16 ounces (like a book)</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-icon">🪨</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Kilogram</div>
+                        <div class="ref-value">Heavy (like a big book)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="measurement-ref">
+                <div class="ref-category">🥤 Capacity</div>
+                <div class="ref-item">
+                    <div class="ref-icon">🥄</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Cup</div>
+                        <div class="ref-value">Drinking cup amount</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-icon">🍼</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Pint</div>
+                        <div class="ref-value">2 cups</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-icon">🥛</div>
+                    <div class="ref-info">
+                        <div class="ref-name">Liter</div>
+                        <div class="ref-value">Big bottle amount</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conversion-box">
+                <div class="conversion-title">Quick Conversions</div>
+                <div style="font-size: 0.9em; color: #234e52;">
+                    12 inches = 1 foot<br>
+                    16 ounces = 1 pound<br>
+                    2 cups = 1 pint
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #e2e8f0;">
+                <h4 style="color: #4a5568; text-align: center; margin-bottom: 10px;">Measurement Tips</h4>
+                <p style="color: #718096; font-size: 0.85em; text-align: center; line-height: 1.4;">
+                    • Use your body as a guide (thumb = inch)<br>
+                    • Compare to familiar objects<br>
+                    • Remember: smaller units = bigger numbers
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'length';
+        let currentProblem = {};
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let totalCount = 0;
+        let hasAnswered = false;
+
+        const lengthObjects = [
+            { name: 'pencil', display: '✏️', length: 6, unit: 'inches', altUnit: '15 cm' },
+            { name: 'ruler', display: '📏', length: 12, unit: 'inches', altUnit: '30 cm' },
+            { name: 'paper', display: '📄', length: 11, unit: 'inches', altUnit: '28 cm' },
+            { name: 'book', display: '📚', length: 9, unit: 'inches', altUnit: '23 cm' },
+            { name: 'crayon', display: '🖍️', length: 4, unit: 'inches', altUnit: '10 cm' },
+            { name: 'eraser', display: '🧽', length: 2, unit: 'inches', altUnit: '5 cm' }
+        ];
+
+        const weightObjects = [
+            { name: 'apple', display: '🍎', weight: 6, unit: 'ounces', altUnit: '170 grams' },
+            { name: 'book', display: '📚', weight: 1, unit: 'pound', altUnit: '450 grams' },
+            { name: 'banana', display: '🍌', weight: 4, unit: 'ounces', altUnit: '120 grams' },
+            { name: 'bottle', display: '🍼', weight: 8, unit: 'ounces', altUnit: '240 grams' },
+            { name: 'orange', display: '🍊', weight: 5, unit: 'ounces', altUnit: '150 grams' },
+            { name: 'bag', display: '🛍️', weight: 2, unit: 'pounds', altUnit: '900 grams' }
+        ];
+
+        const capacityObjects = [
+            { name: 'cup', display: '☕', capacity: 1, unit: 'cup', altUnit: '240 ml' },
+            { name: 'glass', display: '🥛', capacity: 1, unit: 'cup', altUnit: '240 ml' },
+            { name: 'bottle', display: '🍼', capacity: 2, unit: 'cups', altUnit: '480 ml' },
+            { name: 'pitcher', display: '🍶', capacity: 4, unit: 'cups', altUnit: '1 liter' },
+            { name: 'bowl', display: '🥣', capacity: 2, unit: 'cups', altUnit: '480 ml' },
+            { name: 'mug', display: '🍵', capacity: 1, unit: 'cup', altUnit: '240 ml' }
+        ];
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            generateProblem();
+        }
+
+        function generateProblem() {
+            hasAnswered = false;
+            document.getElementById('feedback').textContent = '';
+            
+            // Clear previous answer highlighting
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+            });
+
+            if (currentMode === 'length') {
+                generateLengthProblem();
+            } else if (currentMode === 'weight') {
+                generateWeightProblem();
+            } else if (currentMode === 'capacity') {
+                generateCapacityProblem();
+            } else if (currentMode === 'compare') {
+                generateCompareProblem();
+            }
+        }
+
+        function generateLengthProblem() {
+            const obj = lengthObjects[Math.floor(Math.random() * lengthObjects.length)];
+            currentProblem = {
+                type: 'length',
+                object: obj,
+                correct: `${obj.length} ${obj.unit}`
+            };
+
+            const displayEl = document.getElementById('measurementDisplay');
+            displayEl.innerHTML = `
+                <div class="object-display">${obj.display}</div>
+                <div class="ruler-display">
+                    <div class="ruler">
+                        <div class="ruler-marks" id="rulerMarks"></div>
+                    </div>
+                    <div style="font-size: 0.9em; color: #4a5568; margin-top: 10px;">Ruler showing ${obj.length} ${obj.unit}</div>
+                </div>
+            `;
+
+            document.getElementById('question').textContent = `How long is this ${obj.name}?`;
+
+            // Create answer options
+            const correctAnswer = `${obj.length} ${obj.unit}`;
+            const wrongAnswers = [];
+            
+            // Generate some wrong answers
+            for (let i = 0; i < 3; i++) {
+                let wrongLength;
+                if (i === 0) wrongLength = obj.length + 2;
+                else if (i === 1) wrongLength = obj.length - 1;
+                else wrongLength = obj.length + 4;
+                
+                if (wrongLength > 0 && wrongLength !== obj.length) {
+                    wrongAnswers.push(`${wrongLength} ${obj.unit}`);
+                }
+            }
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(answer => 
+                `<button class="answer-btn" onclick="checkAnswer('${answer}')">${answer}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateWeightProblem() {
+            const obj = weightObjects[Math.floor(Math.random() * weightObjects.length)];
+            currentProblem = {
+                type: 'weight',
+                object: obj,
+                correct: `${obj.weight} ${obj.unit}`
+            };
+
+            const displayEl = document.getElementById('measurementDisplay');
+            displayEl.innerHTML = `
+                <div class="object-display">${obj.display}</div>
+                <div class="scale-display">⚖️</div>
+                <div style="font-size: 1.2em; color: #4a5568; margin-top: 15px;">Scale showing ${obj.weight} ${obj.unit}</div>
+            `;
+
+            document.getElementById('question').textContent = `How much does this ${obj.name} weigh?`;
+
+            // Create answer options
+            const correctAnswer = `${obj.weight} ${obj.unit}`;
+            const wrongAnswers = [];
+            
+            // Generate some wrong answers
+            for (let i = 0; i < 3; i++) {
+                let wrongWeight;
+                if (i === 0) wrongWeight = obj.weight + 1;
+                else if (i === 1) wrongWeight = Math.max(1, obj.weight - 1);
+                else wrongWeight = obj.weight + 2;
+                
+                if (wrongWeight !== obj.weight) {
+                    wrongAnswers.push(`${wrongWeight} ${obj.unit}`);
+                }
+            }
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(answer => 
+                `<button class="answer-btn" onclick="checkAnswer('${answer}')">${answer}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateCapacityProblem() {
+            const obj = capacityObjects[Math.floor(Math.random() * capacityObjects.length)];
+            currentProblem = {
+                type: 'capacity',
+                object: obj,
+                correct: `${obj.capacity} ${obj.unit}`
+            };
+
+            const displayEl = document.getElementById('measurementDisplay');
+            displayEl.innerHTML = `
+                <div class="object-display">${obj.display}</div>
+                <div style="font-size: 1.2em; color: #4a5568; margin-top: 20px;">This ${obj.name} holds ${obj.capacity} ${obj.unit}</div>
+            `;
+
+            document.getElementById('question').textContent = `How much does this ${obj.name} hold?`;
+
+            // Create answer options
+            const correctAnswer = `${obj.capacity} ${obj.unit}`;
+            const wrongAnswers = [];
+            
+            // Generate some wrong answers
+            for (let i = 0; i < 3; i++) {
+                let wrongCapacity;
+                let wrongUnit = obj.unit;
+                
+                if (i === 0) {
+                    wrongCapacity = obj.capacity + 1;
+                } else if (i === 1) {
+                    wrongCapacity = Math.max(1, obj.capacity - 1);
+                } else {
+                    wrongCapacity = obj.capacity + 2;
+                }
+                
+                if (wrongCapacity !== obj.capacity) {
+                    wrongAnswers.push(`${wrongCapacity} ${wrongUnit}`);
+                }
+            }
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(answer => 
+                `<button class="answer-btn" onclick="checkAnswer('${answer}')">${answer}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateCompareProblem() {
+            const allObjects = [...lengthObjects, ...weightObjects];
+            const obj1 = allObjects[Math.floor(Math.random() * allObjects.length)];
+            let obj2 = allObjects[Math.floor(Math.random() * allObjects.length)];
+            
+            // Make sure we have different objects
+            while (obj2.name === obj1.name) {
+                obj2 = allObjects[Math.floor(Math.random() * allObjects.length)];
+            }
+
+            let comparison, correctAnswer;
+            if (obj1.length && obj2.length) {
+                comparison = obj1.length > obj2.length ? 'longer' : 'shorter';
+                correctAnswer = obj1.length > obj2.length ? `${obj1.name} is longer` : `${obj2.name} is longer`;
+            } else if (obj1.weight && obj2.weight) {
+                comparison = obj1.weight > obj2.weight ? 'heavier' : 'lighter';
+                correctAnswer = obj1.weight > obj2.weight ? `${obj1.name} is heavier` : `${obj2.name} is heavier`;
+            } else {
+                // Mix length and weight - just pick length comparison
+                generateCompareProblem();
+                return;
+            }
+
+            currentProblem = {
+                type: 'compare',
+                obj1: obj1,
+                obj2: obj2,
+                correct: correctAnswer
+            };
+
+            const displayEl = document.getElementById('measurementDisplay');
+            displayEl.innerHTML = `
+                <div class="container-display">
+                    <div class="container">
+                        <div>${obj1.display}</div>
+                        <div class="container-label">${obj1.name}</div>
+                    </div>
+                    <div style="font-size: 3em; color: #4a5568;">vs</div>
+                    <div class="container">
+                        <div>${obj2.display}</div>
+                        <div class="container-label">${obj2.name}</div>
+                    </div>
+                </div>
+            `;
+
+            const questionType = obj1.length && obj2.length ? 'longer' : 'heavier';
+            document.getElementById('question').textContent = `Which one is ${questionType}?`;
+
+            // Create answer options
+            const option1 = `${obj1.name} is ${questionType}`;
+            const option2 = `${obj2.name} is ${questionType}`;
+            const wrongOption = 'They are the same';
+            
+            const allAnswers = [option1, option2, wrongOption].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(answer => 
+                `<button class="answer-btn" onclick="checkAnswer('${answer}')" style="font-size: 1.1em;">${answer}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function checkAnswer(answer) {
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            totalCount++;
+            document.getElementById('total').textContent = totalCount;
+            
+            const isCorrect = answer === currentProblem.correct;
+            const feedbackEl = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Great job! 🎉';
+                feedbackEl.className = 'feedback correct-feedback';
+                event.target.classList.add('correct');
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                feedbackEl.textContent = `Not quite! The answer is: ${currentProblem.correct}`;
+                feedbackEl.className = 'feedback incorrect-feedback';
+                
+                event.target.classList.add('incorrect');
+                
+                // Highlight correct answer
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    if (btn.textContent.trim() === currentProblem.correct) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function nextProblem() {
+            if (!hasAnswered) return;
+            generateProblem();
+        }
+
+        // Initialize
+        generateProblem();
+    </script>
+</body>
+</html>

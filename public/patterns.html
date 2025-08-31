@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Puzzles & Patterns</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .game-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .reference-section {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .game-modes {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .mode-btn.active {
+            background: #ed8936;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mode-btn:not(.active) {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .problem-area {
+            min-height: 350px;
+            margin: 30px 0;
+        }
+
+        .pattern-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            font-size: 3em;
+            font-weight: bold;
+            color: #2d3748;
+            flex-wrap: wrap;
+        }
+
+        .number-box {
+            background: #4299e1;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            min-width: 60px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 1em;
+        }
+
+        .missing-box {
+            background: #fed7d7;
+            color: #e53e3e;
+            border: 3px dashed #e53e3e;
+            font-size: 1.5em;
+        }
+
+        .question {
+            font-size: 2.2em;
+            color: #2d3748;
+            margin: 25px 0;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .input-section {
+            margin: 30px 0;
+        }
+
+        .answer-input {
+            font-size: 3em;
+            padding: 15px;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            width: 150px;
+            text-align: center;
+            outline: none;
+            font-weight: bold;
+        }
+
+        .answer-input:focus {
+            border-color: #ed8936;
+            box-shadow: 0 0 10px rgba(237, 137, 54, 0.3);
+        }
+
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .answer-btn {
+            padding: 15px 10px;
+            font-size: 1.8em;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-btn:hover {
+            border-color: #ed8936;
+            transform: scale(1.02);
+        }
+
+        .answer-btn.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #38a169;
+        }
+
+        .answer-btn.incorrect {
+            background: #e53e3e;
+            color: white;
+            border-color: #c53030;
+        }
+
+        .check-btn {
+            background: #ed8936;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .next-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .feedback {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 25px 0;
+            min-height: 60px;
+        }
+
+        .correct-feedback { color: #38a169; }
+        .incorrect-feedback { color: #e53e3e; }
+
+        .controls {
+            margin: 30px 0;
+        }
+
+        .score {
+            font-size: 1.3em;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .reference-title {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .pattern-ref {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f7fafc;
+            border-left: 5px solid #ed8936;
+        }
+
+        .pattern-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .pattern-example {
+            font-size: 1.1em;
+            color: #4a5568;
+            margin: 5px 0;
+            font-family: monospace;
+        }
+
+        .pattern-description {
+            font-size: 1em;
+            color: #718096;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .hint {
+            background: #fef5e7;
+            border: 2px solid #ed8936;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #744210;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-modes {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mode-btn {
+                width: 200px;
+            }
+            
+            .pattern-display {
+                font-size: 2em;
+                gap: 10px;
+            }
+            
+            .number-box {
+                padding: 10px 15px;
+                min-width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="hub.html" class="back-button">← Back to Hub</a>
+        <h1>🧩 Math Puzzles & Patterns 🧩</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="game-section">
+            <div class="game-modes">
+                <button class="mode-btn active" onclick="setMode('sequence')">Number Sequences</button>
+                <button class="mode-btn" onclick="setMode('missing')">Missing Numbers</button>
+                <button class="mode-btn" onclick="setMode('pattern')">Find Pattern</button>
+            </div>
+
+            <div class="problem-area" id="problemArea">
+                <div class="pattern-display" id="patternDisplay">
+                    <div class="number-box">2</div>
+                    <div class="number-box">4</div>
+                    <div class="number-box">6</div>
+                    <div class="number-box missing-box">?</div>
+                </div>
+                
+                <div class="question" id="question">What number comes next?</div>
+                
+                <div class="input-section" id="inputSection" style="display: none;">
+                    <input type="number" class="answer-input" id="answerInput" placeholder="?" autofocus>
+                    <div class="controls">
+                        <button class="check-btn" onclick="checkInputAnswer()">Check ✓</button>
+                    </div>
+                </div>
+                
+                <div class="answer-buttons" id="answerButtons">
+                    <button class="answer-btn" onclick="checkAnswer(8)">8</button>
+                    <button class="answer-btn" onclick="checkAnswer(7)">7</button>
+                    <button class="answer-btn" onclick="checkAnswer(10)">10</button>
+                    <button class="answer-btn" onclick="checkAnswer(6)">6</button>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="controls">
+                <button class="next-btn" onclick="nextProblem()">Next →</button>
+            </div>
+
+            <div class="score">
+                <div>Correct: <span id="correct">0</span></div>
+                <div>Incorrect: <span id="incorrect">0</span></div>
+                <div>Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+        <div class="reference-section">
+            <div class="reference-title">Pattern Guide</div>
+            
+            <div class="pattern-ref">
+                <div class="pattern-name">Counting by 1s</div>
+                <div class="pattern-example">1, 2, 3, 4, 5...</div>
+                <div class="pattern-description">Add 1 each time</div>
+            </div>
+            
+            <div class="pattern-ref">
+                <div class="pattern-name">Counting by 2s</div>
+                <div class="pattern-example">2, 4, 6, 8, 10...</div>
+                <div class="pattern-description">Add 2 each time (even numbers)</div>
+            </div>
+            
+            <div class="pattern-ref">
+                <div class="pattern-name">Counting by 5s</div>
+                <div class="pattern-example">5, 10, 15, 20, 25...</div>
+                <div class="pattern-description">Add 5 each time</div>
+            </div>
+            
+            <div class="pattern-ref">
+                <div class="pattern-name">Counting by 10s</div>
+                <div class="pattern-example">10, 20, 30, 40, 50...</div>
+                <div class="pattern-description">Add 10 each time</div>
+            </div>
+            
+            <div class="pattern-ref">
+                <div class="pattern-name">Counting Backwards</div>
+                <div class="pattern-example">10, 9, 8, 7, 6...</div>
+                <div class="pattern-description">Subtract 1 each time</div>
+            </div>
+
+            <div class="hint">
+                <strong>💡 Pattern Tip:</strong>
+                Look at the difference between numbers to find the pattern!
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
+                <h4 style="color: #4a5568; text-align: center; margin-bottom: 15px;">How to Find Patterns</h4>
+                <p style="color: #718096; font-size: 0.9em; text-align: center; line-height: 1.5;">
+                    1. Look at the first two numbers<br>
+                    2. Find the difference between them<br>
+                    3. Check if the same difference continues<br>
+                    4. Use that pattern to find the missing number!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'sequence';
+        let currentProblem = {};
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let totalCount = 0;
+        let hasAnswered = false;
+
+        const patternTypes = [
+            { name: 'count1', step: 1, description: 'counting by 1s' },
+            { name: 'count2', step: 2, description: 'counting by 2s' },
+            { name: 'count5', step: 5, description: 'counting by 5s' },
+            { name: 'count10', step: 10, description: 'counting by 10s' },
+            { name: 'backward1', step: -1, description: 'counting backwards by 1s' },
+            { name: 'backward2', step: -2, description: 'counting backwards by 2s' }
+        ];
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            generateProblem();
+        }
+
+        function generateProblem() {
+            hasAnswered = false;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('answerInput').value = '';
+            
+            // Clear previous answer highlighting
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+            });
+
+            if (currentMode === 'sequence') {
+                generateSequenceProblem();
+            } else if (currentMode === 'missing') {
+                generateMissingProblem();
+            } else if (currentMode === 'pattern') {
+                generatePatternProblem();
+            }
+        }
+
+        function generateSequenceProblem() {
+            const patternType = patternTypes[Math.floor(Math.random() * patternTypes.length)];
+            const startNum = Math.floor(Math.random() * 20) + 1;
+            
+            // Ensure we don't go negative or too high
+            const adjustedStart = patternType.step < 0 ? Math.max(startNum, 20) : startNum;
+            
+            const sequence = [];
+            for (let i = 0; i < 4; i++) {
+                sequence.push(adjustedStart + (i * patternType.step));
+            }
+            
+            const nextNumber = adjustedStart + (4 * patternType.step);
+            
+            currentProblem = {
+                type: 'sequence',
+                sequence: sequence,
+                correct: nextNumber,
+                pattern: patternType
+            };
+
+            displaySequencePattern(sequence, true);
+            document.getElementById('question').textContent = 'What number comes next?';
+            showMultipleChoice();
+        }
+
+        function generateMissingProblem() {
+            const patternType = patternTypes[Math.floor(Math.random() * patternTypes.length)];
+            const startNum = Math.floor(Math.random() * 20) + 1;
+            const adjustedStart = patternType.step < 0 ? Math.max(startNum, 20) : startNum;
+            
+            const fullSequence = [];
+            for (let i = 0; i < 5; i++) {
+                fullSequence.push(adjustedStart + (i * patternType.step));
+            }
+            
+            // Pick a random position to hide (not first or last)
+            const missingIndex = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+            const missingNumber = fullSequence[missingIndex];
+            
+            currentProblem = {
+                type: 'missing',
+                sequence: fullSequence,
+                missingIndex: missingIndex,
+                correct: missingNumber,
+                pattern: patternType
+            };
+
+            displayMissingPattern(fullSequence, missingIndex);
+            document.getElementById('question').textContent = 'What is the missing number?';
+            showInputField();
+        }
+
+        function generatePatternProblem() {
+            const patternType = patternTypes[Math.floor(Math.random() * patternTypes.length)];
+            const startNum = Math.floor(Math.random() * 15) + 1;
+            const adjustedStart = patternType.step < 0 ? Math.max(startNum, 15) : startNum;
+            
+            const sequence = [];
+            for (let i = 0; i < 3; i++) {
+                sequence.push(adjustedStart + (i * patternType.step));
+            }
+            
+            currentProblem = {
+                type: 'pattern',
+                sequence: sequence,
+                correct: patternType.step,
+                pattern: patternType
+            };
+
+            displaySequencePattern(sequence, false);
+            document.getElementById('question').textContent = 'What is the pattern rule?';
+            showPatternChoices();
+        }
+
+        function displaySequencePattern(sequence, showMissing) {
+            const displayEl = document.getElementById('patternDisplay');
+            let html = '';
+            
+            sequence.forEach(num => {
+                html += `<div class="number-box">${num}</div>`;
+            });
+            
+            if (showMissing) {
+                html += `<div class="number-box missing-box">?</div>`;
+            }
+            
+            displayEl.innerHTML = html;
+        }
+
+        function displayMissingPattern(sequence, missingIndex) {
+            const displayEl = document.getElementById('patternDisplay');
+            let html = '';
+            
+            sequence.forEach((num, index) => {
+                if (index === missingIndex) {
+                    html += `<div class="number-box missing-box">?</div>`;
+                } else {
+                    html += `<div class="number-box">${num}</div>`;
+                }
+            });
+            
+            displayEl.innerHTML = html;
+        }
+
+        function showMultipleChoice() {
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('answerButtons').style.display = 'grid';
+            
+            const correctAnswer = currentProblem.correct;
+            const wrongAnswers = [];
+            
+            // Generate plausible wrong answers
+            for (let i = 0; i < 3; i++) {
+                let wrong;
+                if (i === 0) {
+                    wrong = correctAnswer + currentProblem.pattern.step; // One more step
+                } else if (i === 1) {
+                    wrong = correctAnswer - currentProblem.pattern.step; // One less step
+                } else {
+                    wrong = correctAnswer + (Math.floor(Math.random() * 6) - 3); // Random nearby
+                }
+                
+                if (wrong !== correctAnswer && wrong > 0 && !wrongAnswers.includes(wrong)) {
+                    wrongAnswers.push(wrong);
+                }
+            }
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers.slice(0, 3)].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(value => 
+                `<button class="answer-btn" onclick="checkAnswer(${value})">${value}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function showInputField() {
+            document.getElementById('answerButtons').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('answerInput').focus();
+        }
+
+        function showPatternChoices() {
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('answerButtons').style.display = 'grid';
+            
+            const correctStep = Math.abs(currentProblem.pattern.step);
+            const isBackward = currentProblem.pattern.step < 0;
+            
+            let choices = [];
+            if (isBackward) {
+                choices = [
+                    `Subtract ${correctStep}`,
+                    `Add ${correctStep}`,
+                    `Subtract ${correctStep + 1}`,
+                    `Add ${correctStep + 1}`
+                ];
+            } else {
+                choices = [
+                    `Add ${correctStep}`,
+                    `Subtract ${correctStep}`,
+                    `Add ${correctStep + 1}`,
+                    `Subtract ${correctStep + 1}`
+                ];
+            }
+            
+            currentProblem.correctChoice = choices[0];
+            choices = choices.sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = choices.map(choice => 
+                `<button class="answer-btn" onclick="checkPatternAnswer('${choice}')">${choice}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function checkAnswer(answer) {
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            totalCount++;
+            document.getElementById('total').textContent = totalCount;
+            
+            const isCorrect = answer === currentProblem.correct;
+            const feedbackEl = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Great job! 🎉';
+                feedbackEl.className = 'feedback correct-feedback';
+                event.target.classList.add('correct');
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                feedbackEl.textContent = `Not quite! The answer is ${currentProblem.correct}`;
+                feedbackEl.className = 'feedback incorrect-feedback';
+                
+                event.target.classList.add('incorrect');
+                
+                // Highlight correct answer
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    if (parseInt(btn.textContent) === currentProblem.correct) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function checkInputAnswer() {
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            
+            if (isNaN(userAnswer)) {
+                document.getElementById('feedback').textContent = 'Please enter a number!';
+                document.getElementById('feedback').className = 'feedback incorrect-feedback';
+                return;
+            }
+            
+            hasAnswered = true;
+            totalCount++;
+            document.getElementById('total').textContent = totalCount;
+            
+            const feedbackEl = document.getElementById('feedback');
+            
+            if (userAnswer === currentProblem.correct) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Perfect! 🎉';
+                feedbackEl.className = 'feedback correct-feedback';
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                feedbackEl.textContent = `Not quite! The answer is ${currentProblem.correct}`;
+                feedbackEl.className = 'feedback incorrect-feedback';
+            }
+        }
+
+        function checkPatternAnswer(answer) {
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            totalCount++;
+            document.getElementById('total').textContent = totalCount;
+            
+            const isCorrect = answer === currentProblem.correctChoice;
+            const feedbackEl = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Excellent! 🎉';
+                feedbackEl.className = 'feedback correct-feedback';
+                event.target.classList.add('correct');
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                feedbackEl.textContent = `Not quite! The pattern is: ${currentProblem.correctChoice}`;
+                feedbackEl.className = 'feedback incorrect-feedback';
+                
+                event.target.classList.add('incorrect');
+                
+                // Highlight correct answer
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    if (btn.textContent === currentProblem.correctChoice) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function nextProblem() {
+            if (!hasAnswered) return;
+            generateProblem();
+        }
+
+        // Allow Enter key in input field
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !hasAnswered) {
+                checkInputAnswer();
+            }
+        });
+
+        // Initialize
+        generateProblem();
+    </script>
+</body>
+</html>

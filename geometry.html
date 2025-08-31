@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Basics</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .game-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .reference-section {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .game-modes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .mode-btn.active {
+            background: #805ad5;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mode-btn:not(.active) {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .problem-area {
+            min-height: 350px;
+            margin: 30px 0;
+        }
+
+        .shape-display {
+            font-size: 12em;
+            margin: 30px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            line-height: 1;
+        }
+
+        .svg-shape {
+            margin: 20px 0;
+        }
+
+        .question {
+            font-size: 2.2em;
+            color: #2d3748;
+            margin: 25px 0;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .answer-btn {
+            padding: 15px 10px;
+            font-size: 1.3em;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-btn:hover {
+            border-color: #805ad5;
+            transform: scale(1.02);
+        }
+
+        .answer-btn.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #38a169;
+        }
+
+        .answer-btn.incorrect {
+            background: #e53e3e;
+            color: white;
+            border-color: #c53030;
+        }
+
+        .feedback {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 25px 0;
+            min-height: 60px;
+        }
+
+        .correct-feedback { color: #38a169; }
+        .incorrect-feedback { color: #e53e3e; }
+
+        .controls {
+            margin: 30px 0;
+        }
+
+        .next-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .score {
+            font-size: 1.3em;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .reference-title {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .shape-ref {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f7fafc;
+            border-left: 5px solid #805ad5;
+        }
+
+        .shape-icon {
+            font-size: 3em;
+            margin-right: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .shape-info {
+            flex: 1;
+        }
+
+        .shape-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .shape-details {
+            font-size: 1em;
+            color: #4a5568;
+            line-height: 1.4;
+        }
+
+        .symmetry-demo {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .symmetry-line {
+            width: 3px;
+            height: 80px;
+            background: #e53e3e;
+            margin: 0 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-modes {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mode-btn {
+                width: 180px;
+            }
+            
+            .shape-display {
+                font-size: 8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="hub.html" class="back-button">← Back to Hub</a>
+        <h1>📐 Geometry Basics 📐</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="game-section">
+            <div class="game-modes">
+                <button class="mode-btn active" onclick="setMode('identify')">Name Shape</button>
+                <button class="mode-btn" onclick="setMode('sides')">Count Sides</button>
+                <button class="mode-btn" onclick="setMode('corners')">Count Corners</button>
+                <button class="mode-btn" onclick="setMode('symmetry')">Find Symmetry</button>
+            </div>
+
+            <div class="problem-area" id="problemArea">
+                <div class="shape-display" id="shapeDisplay">🔷</div>
+                <div class="question" id="question">What shape is this?</div>
+                <div class="answer-buttons" id="answerButtons">
+                    <button class="answer-btn" onclick="checkAnswer('triangle')">Triangle</button>
+                    <button class="answer-btn" onclick="checkAnswer('square')">Square</button>
+                    <button class="answer-btn" onclick="checkAnswer('circle')">Circle</button>
+                    <button class="answer-btn" onclick="checkAnswer('rectangle')">Rectangle</button>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="controls">
+                <button class="next-btn" onclick="nextProblem()">Next →</button>
+            </div>
+
+            <div class="score">
+                <div>Correct: <span id="correct">0</span></div>
+                <div>Incorrect: <span id="incorrect">0</span></div>
+                <div>Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+        <div class="reference-section">
+            <div class="reference-title">Shape Reference</div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">🔺</div>
+                <div class="shape-info">
+                    <div class="shape-name">Triangle</div>
+                    <div class="shape-details">3 sides, 3 corners<br>Can be symmetrical</div>
+                </div>
+            </div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">⬜</div>
+                <div class="shape-info">
+                    <div class="shape-name">Square</div>
+                    <div class="shape-details">4 equal sides, 4 corners<br>4 lines of symmetry</div>
+                </div>
+            </div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">▭</div>
+                <div class="shape-info">
+                    <div class="shape-name">Rectangle</div>
+                    <div class="shape-details">4 sides, 4 corners<br>2 lines of symmetry</div>
+                </div>
+            </div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">⭕</div>
+                <div class="shape-info">
+                    <div class="shape-name">Circle</div>
+                    <div class="shape-details">No sides, no corners<br>Infinite lines of symmetry</div>
+                </div>
+            </div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">🔷</div>
+                <div class="shape-info">
+                    <div class="shape-name">Diamond</div>
+                    <div class="shape-details">4 sides, 4 corners<br>2 lines of symmetry</div>
+                </div>
+            </div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">⬟</div>
+                <div class="shape-info">
+                    <div class="shape-name">Pentagon</div>
+                    <div class="shape-details">5 sides, 5 corners<br>5 lines of symmetry</div>
+                </div>
+            </div>
+            
+            <div class="shape-ref">
+                <div class="shape-icon">⬡</div>
+                <div class="shape-info">
+                    <div class="shape-name">Hexagon</div>
+                    <div class="shape-details">6 sides, 6 corners<br>6 lines of symmetry</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
+                <h4 style="color: #4a5568; text-align: center; margin-bottom: 15px;">Symmetry Guide</h4>
+                <p style="color: #718096; font-size: 0.9em; text-align: center;">
+                    A shape has symmetry if you can draw a line through it and both sides look exactly the same!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'identify';
+        let currentProblem = {};
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let totalCount = 0;
+        let hasAnswered = false;
+
+        const shapes = [
+            { 
+                name: 'triangle', 
+                display: '🔺', 
+                sides: 3, 
+                corners: 3, 
+                hasSymmetry: true,
+                symmetryLines: 1
+            },
+            { 
+                name: 'square', 
+                display: '⬜', 
+                sides: 4, 
+                corners: 4, 
+                hasSymmetry: true,
+                symmetryLines: 4
+            },
+            { 
+                name: 'rectangle', 
+                display: '▭', 
+                sides: 4, 
+                corners: 4, 
+                hasSymmetry: true,
+                symmetryLines: 2
+            },
+            { 
+                name: 'circle', 
+                display: '⭕', 
+                sides: 0, 
+                corners: 0, 
+                hasSymmetry: true,
+                symmetryLines: 'infinite'
+            },
+            { 
+                name: 'diamond', 
+                display: '🔷', 
+                sides: 4, 
+                corners: 4, 
+                hasSymmetry: true,
+                symmetryLines: 2
+            },
+            { 
+                name: 'pentagon', 
+                display: '⬟', 
+                sides: 5, 
+                corners: 5, 
+                hasSymmetry: true,
+                symmetryLines: 5
+            },
+            { 
+                name: 'hexagon', 
+                display: '⬡', 
+                sides: 6, 
+                corners: 6, 
+                hasSymmetry: true,
+                symmetryLines: 6
+            }
+        ];
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            generateProblem();
+        }
+
+        function generateProblem() {
+            hasAnswered = false;
+            document.getElementById('feedback').textContent = '';
+            
+            // Clear previous answer highlighting
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+            });
+
+            if (currentMode === 'identify') {
+                generateIdentifyProblem();
+            } else if (currentMode === 'sides') {
+                generateSidesProblem();
+            } else if (currentMode === 'corners') {
+                generateCornersProblem();
+            } else if (currentMode === 'symmetry') {
+                generateSymmetryProblem();
+            }
+        }
+
+        function generateIdentifyProblem() {
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            currentProblem = {
+                type: 'identify',
+                shape: shape,
+                correct: shape.name
+            };
+
+            document.getElementById('shapeDisplay').textContent = shape.display;
+            document.getElementById('question').textContent = 'What shape is this?';
+
+            // Create answer options - show 4 random shapes including correct one
+            const wrongShapes = shapes.filter(s => s.name !== shape.name)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            
+            const allOptions = [shape, ...wrongShapes].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allOptions.map(option => 
+                `<button class="answer-btn" onclick="checkAnswer('${option.name}')">${option.name.charAt(0).toUpperCase() + option.name.slice(1)}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateSidesProblem() {
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            currentProblem = {
+                type: 'sides',
+                shape: shape,
+                correct: shape.sides
+            };
+
+            document.getElementById('shapeDisplay').textContent = shape.display;
+            document.getElementById('question').textContent = `How many sides does this ${shape.name} have?`;
+
+            // Create answer options
+            const correctAnswer = shape.sides;
+            const options = [];
+            
+            if (correctAnswer === 0) {
+                options.push(0, 1, 3, 4);
+            } else {
+                for (let i = Math.max(0, correctAnswer - 2); i <= correctAnswer + 2; i++) {
+                    if (options.length < 4 && i >= 0) {
+                        options.push(i);
+                    }
+                }
+            }
+            
+            // Ensure we have exactly 4 options and include the correct answer
+            const finalOptions = [...new Set([correctAnswer, ...options])].slice(0, 4);
+            while (finalOptions.length < 4) {
+                const randomNum = Math.floor(Math.random() * 8);
+                if (!finalOptions.includes(randomNum)) {
+                    finalOptions.push(randomNum);
+                }
+            }
+            
+            finalOptions.sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = finalOptions.map(num => 
+                `<button class="answer-btn" onclick="checkAnswer(${num})">${num}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateCornersProblem() {
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            currentProblem = {
+                type: 'corners',
+                shape: shape,
+                correct: shape.corners
+            };
+
+            document.getElementById('shapeDisplay').textContent = shape.display;
+            document.getElementById('question').textContent = `How many corners does this ${shape.name} have?`;
+
+            // Create answer options (same logic as sides)
+            const correctAnswer = shape.corners;
+            const options = [];
+            
+            if (correctAnswer === 0) {
+                options.push(0, 1, 3, 4);
+            } else {
+                for (let i = Math.max(0, correctAnswer - 2); i <= correctAnswer + 2; i++) {
+                    if (options.length < 4 && i >= 0) {
+                        options.push(i);
+                    }
+                }
+            }
+            
+            const finalOptions = [...new Set([correctAnswer, ...options])].slice(0, 4);
+            while (finalOptions.length < 4) {
+                const randomNum = Math.floor(Math.random() * 8);
+                if (!finalOptions.includes(randomNum)) {
+                    finalOptions.push(randomNum);
+                }
+            }
+            
+            finalOptions.sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = finalOptions.map(num => 
+                `<button class="answer-btn" onclick="checkAnswer(${num})">${num}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateSymmetryProblem() {
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            currentProblem = {
+                type: 'symmetry',
+                shape: shape,
+                correct: shape.hasSymmetry
+            };
+
+            document.getElementById('shapeDisplay').textContent = shape.display;
+            document.getElementById('question').textContent = `Does this ${shape.name} have symmetry?`;
+
+            const buttonsHTML = `
+                <button class="answer-btn" onclick="checkAnswer(true)">Yes</button>
+                <button class="answer-btn" onclick="checkAnswer(false)">No</button>
+            `;
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function checkAnswer(answer) {
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            totalCount++;
+            document.getElementById('total').textContent = totalCount;
+            
+            let isCorrect = false;
+            let correctAnswer;
+            
+            if (currentMode === 'identify') {
+                isCorrect = answer === currentProblem.correct;
+                correctAnswer = currentProblem.correct;
+            } else if (currentMode === 'sides' || currentMode === 'corners') {
+                isCorrect = parseInt(answer) === currentProblem.correct;
+                correctAnswer = currentProblem.correct;
+            } else if (currentMode === 'symmetry') {
+                isCorrect = answer === currentProblem.correct;
+                correctAnswer = currentProblem.correct ? 'Yes' : 'No';
+            }
+            
+            const feedbackEl = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Great job! 🎉';
+                feedbackEl.className = 'feedback correct-feedback';
+                
+                // Highlight correct answer
+                event.target.classList.add('correct');
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                
+                let correctText;
+                if (currentMode === 'identify') {
+                    correctText = `It's a ${correctAnswer}!`;
+                } else if (currentMode === 'sides') {
+                    correctText = `It has ${correctAnswer} sides!`;
+                } else if (currentMode === 'corners') {
+                    correctText = `It has ${correctAnswer} corners!`;
+                } else {
+                    correctText = `The answer is ${correctAnswer}!`;
+                }
+                
+                feedbackEl.textContent = `Not quite! ${correctText} 💪`;
+                feedbackEl.className = 'feedback incorrect-feedback';
+                
+                // Highlight wrong answer and show correct one
+                event.target.classList.add('incorrect');
+                
+                // Find and highlight correct answer
+                const buttons = document.querySelectorAll('.answer-btn');
+                buttons.forEach(btn => {
+                    const btnText = btn.textContent.toLowerCase();
+                    const btnValue = btn.onclick.toString();
+                    
+                    if (currentMode === 'identify') {
+                        if (btnText === correctAnswer) {
+                            btn.classList.add('correct');
+                        }
+                    } else if (currentMode === 'sides' || currentMode === 'corners') {
+                        if (btnText === correctAnswer.toString()) {
+                            btn.classList.add('correct');
+                        }
+                    } else if (currentMode === 'symmetry') {
+                        if ((correctAnswer === 'Yes' && btnText === 'yes') || 
+                            (correctAnswer === 'No' && btnText === 'no')) {
+                            btn.classList.add('correct');
+                        }
+                    }
+                });
+            }
+        }
+
+        function nextProblem() {
+            if (!hasAnswered) return;
+            generateProblem();
+        }
+
+        // Initialize
+        generateProblem();
+    </script>
+</body>
+</html>

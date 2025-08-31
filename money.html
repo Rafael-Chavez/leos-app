@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Math</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .game-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .reference-section {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .game-modes {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .mode-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .mode-btn.active {
+            background: #38a169;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mode-btn:not(.active) {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .problem-area {
+            min-height: 300px;
+            margin: 30px 0;
+        }
+
+        .coin-display {
+            font-size: 8em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .bill-display {
+            font-size: 6em;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0fff4;
+            border: 3px solid #38a169;
+            border-radius: 15px;
+            color: #2f855a;
+        }
+
+        .question {
+            font-size: 2.5em;
+            color: #2d3748;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .answer-btn {
+            padding: 15px;
+            font-size: 1.5em;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .answer-btn:hover {
+            border-color: #38a169;
+            transform: scale(1.02);
+        }
+
+        .answer-btn.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #38a169;
+        }
+
+        .answer-btn.incorrect {
+            background: #e53e3e;
+            color: white;
+            border-color: #c53030;
+        }
+
+        .money-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            font-size: 2em;
+        }
+
+        .money-input input {
+            font-size: 1.5em;
+            padding: 10px;
+            border: 3px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            width: 120px;
+        }
+
+        .check-btn {
+            background: #38a169;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .next-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .feedback {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 50px;
+        }
+
+        .correct-feedback { color: #38a169; }
+        .incorrect-feedback { color: #e53e3e; }
+
+        .score {
+            font-size: 1.3em;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .reference-title {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .coin-ref {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+            background: #f7fafc;
+        }
+
+        .coin-icon {
+            font-size: 3em;
+            margin-right: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .coin-info {
+            flex: 1;
+        }
+
+        .coin-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .coin-value {
+            font-size: 1.1em;
+            color: #4a5568;
+        }
+
+        .bill-ref {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #38a169;
+            background: #f0fff4;
+        }
+
+        .bill-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+            color: #2f855a;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-modes {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mode-btn {
+                width: 200px;
+            }
+            
+            .answer-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="hub.html" class="back-button">← Back to Hub</a>
+        <h1>💰 Money Math 💰</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="game-section">
+            <div class="game-modes">
+                <button class="mode-btn active" onclick="setMode('identify')">Identify Money</button>
+                <button class="mode-btn" onclick="setMode('add')">Add Costs</button>
+                <button class="mode-btn" onclick="setMode('change')">Make Change</button>
+            </div>
+
+            <div class="problem-area" id="problemArea">
+                <div class="coin-display" id="moneyDisplay">🪙</div>
+                <div class="question" id="question">What coin is this?</div>
+                <div class="answer-buttons" id="answerButtons">
+                    <button class="answer-btn" onclick="checkAnswer('penny')">Penny (1¢)</button>
+                    <button class="answer-btn" onclick="checkAnswer('nickel')">Nickel (5¢)</button>
+                    <button class="answer-btn" onclick="checkAnswer('dime')">Dime (10¢)</button>
+                    <button class="answer-btn" onclick="checkAnswer('quarter')">Quarter (25¢)</button>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="controls">
+                <button class="next-btn" onclick="nextProblem()">Next →</button>
+            </div>
+
+            <div class="score">
+                <div>Correct: <span id="correct">0</span></div>
+                <div>Incorrect: <span id="incorrect">0</span></div>
+                <div>Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+        <div class="reference-section">
+            <div class="reference-title">Money Reference</div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #4a5568; margin-bottom: 15px;">Coins:</h3>
+                
+                <div class="coin-ref">
+                    <div class="coin-icon">🟤</div>
+                    <div class="coin-info">
+                        <div class="coin-name">Penny</div>
+                        <div class="coin-value">1¢ (1 cent)</div>
+                    </div>
+                </div>
+                
+                <div class="coin-ref">
+                    <div class="coin-icon">⚪</div>
+                    <div class="coin-info">
+                        <div class="coin-name">Nickel</div>
+                        <div class="coin-value">5¢ (5 cents)</div>
+                    </div>
+                </div>
+                
+                <div class="coin-ref">
+                    <div class="coin-icon">⚫</div>
+                    <div class="coin-info">
+                        <div class="coin-name">Dime</div>
+                        <div class="coin-value">10¢ (10 cents)</div>
+                    </div>
+                </div>
+                
+                <div class="coin-ref">
+                    <div class="coin-icon">⚪</div>
+                    <div class="coin-info">
+                        <div class="coin-name">Quarter</div>
+                        <div class="coin-value">25¢ (25 cents)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="color: #4a5568; margin-bottom: 15px;">Bills:</h3>
+                
+                <div class="bill-ref">
+                    <div class="bill-icon">💵</div>
+                    <div class="coin-info">
+                        <div class="coin-name">One Dollar</div>
+                        <div class="coin-value">$1.00 (100 cents)</div>
+                    </div>
+                </div>
+                
+                <div class="bill-ref">
+                    <div class="bill-icon">💵</div>
+                    <div class="coin-info">
+                        <div class="coin-name">Five Dollars</div>
+                        <div class="coin-value">$5.00 (500 cents)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'identify';
+        let currentProblem = {};
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let totalCount = 0;
+        let hasAnswered = false;
+
+        const coins = [
+            { name: 'penny', display: '🟤', value: 1, label: 'Penny (1¢)' },
+            { name: 'nickel', display: '⚪', value: 5, label: 'Nickel (5¢)' },
+            { name: 'dime', display: '⚫', value: 10, label: 'Dime (10¢)' },
+            { name: 'quarter', display: '⚪', value: 25, label: 'Quarter (25¢)' }
+        ];
+
+        const bills = [
+            { name: 'dollar', display: '💵', value: 100, label: '$1.00' },
+            { name: 'five', display: '💵', value: 500, label: '$5.00' }
+        ];
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            generateProblem();
+        }
+
+        function generateProblem() {
+            hasAnswered = false;
+            document.getElementById('feedback').textContent = '';
+            
+            // Clear previous answer highlighting
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+            });
+
+            if (currentMode === 'identify') {
+                generateIdentifyProblem();
+            } else if (currentMode === 'add') {
+                generateAddProblem();
+            } else if (currentMode === 'change') {
+                generateChangeProblem();
+            }
+        }
+
+        function generateIdentifyProblem() {
+            const allMoney = [...coins, ...bills];
+            const randomMoney = allMoney[Math.floor(Math.random() * allMoney.length)];
+            
+            currentProblem = {
+                type: 'identify',
+                correct: randomMoney.name,
+                display: randomMoney.display
+            };
+
+            const displayEl = document.getElementById('moneyDisplay');
+            if (bills.includes(randomMoney)) {
+                displayEl.className = 'bill-display';
+                displayEl.textContent = randomMoney.display;
+                document.getElementById('question').textContent = 'What bill is this?';
+            } else {
+                displayEl.className = 'coin-display';
+                displayEl.textContent = randomMoney.display;
+                document.getElementById('question').textContent = 'What coin is this?';
+            }
+
+            // Create answer options
+            let options = [];
+            if (bills.includes(randomMoney)) {
+                options = bills.map(b => ({ name: b.name, label: b.label }));
+            } else {
+                options = coins.map(c => ({ name: c.name, label: c.label }));
+            }
+
+            const buttonsHTML = options.map(option => 
+                `<button class="answer-btn" onclick="checkAnswer('${option.name}')">${option.label}</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateAddProblem() {
+            // Generate 2-4 random coin values to add
+            const numCoins = Math.floor(Math.random() * 3) + 2; // 2-4 coins
+            const selectedCoins = [];
+            let total = 0;
+            
+            for (let i = 0; i < numCoins; i++) {
+                const coin = coins[Math.floor(Math.random() * coins.length)];
+                selectedCoins.push(coin);
+                total += coin.value;
+            }
+            
+            currentProblem = {
+                type: 'add',
+                coins: selectedCoins,
+                correct: total
+            };
+
+            document.getElementById('moneyDisplay').className = 'coin-display';
+            document.getElementById('moneyDisplay').innerHTML = selectedCoins.map(c => c.display).join(' ');
+            document.getElementById('question').textContent = 'How much money is this?';
+
+            // Create multiple choice answers
+            const correctAnswer = total;
+            const wrongAnswers = [];
+            
+            // Generate some wrong answers
+            while (wrongAnswers.length < 3) {
+                const wrong = correctAnswer + (Math.floor(Math.random() * 20) - 10);
+                if (wrong > 0 && wrong !== correctAnswer && !wrongAnswers.includes(wrong)) {
+                    wrongAnswers.push(wrong);
+                }
+            }
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(value => 
+                `<button class="answer-btn" onclick="checkAnswer(${value})">${value}¢</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function generateChangeProblem() {
+            // Simple change problems: item costs X, paid with Y, what's the change?
+            const itemCost = (Math.floor(Math.random() * 75) + 5); // 5-79 cents
+            const paidAmount = [25, 50, 100][Math.floor(Math.random() * 3)]; // quarter, 50¢, or $1
+            
+            if (itemCost >= paidAmount) {
+                generateChangeProblem(); // Try again
+                return;
+            }
+            
+            const change = paidAmount - itemCost;
+            
+            currentProblem = {
+                type: 'change',
+                itemCost: itemCost,
+                paidAmount: paidAmount,
+                correct: change
+            };
+
+            document.getElementById('moneyDisplay').className = 'coin-display';
+            document.getElementById('moneyDisplay').textContent = '🛒';
+            
+            const paidDisplay = paidAmount === 100 ? '$1.00' : `${paidAmount}¢`;
+            document.getElementById('question').innerHTML = 
+                `Item costs ${itemCost}¢<br>You paid ${paidDisplay}<br>What's your change?`;
+
+            // Create multiple choice answers
+            const correctAnswer = change;
+            const wrongAnswers = [];
+            
+            while (wrongAnswers.length < 3) {
+                const wrong = correctAnswer + (Math.floor(Math.random() * 20) - 10);
+                if (wrong > 0 && wrong !== correctAnswer && !wrongAnswers.includes(wrong)) {
+                    wrongAnswers.push(wrong);
+                }
+            }
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            const buttonsHTML = allAnswers.map(value => 
+                `<button class="answer-btn" onclick="checkAnswer(${value})">${value}¢</button>`
+            ).join('');
+            
+            document.getElementById('answerButtons').innerHTML = buttonsHTML;
+        }
+
+        function checkAnswer(answer) {
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            totalCount++;
+            document.getElementById('total').textContent = totalCount;
+            
+            let isCorrect = false;
+            
+            if (currentMode === 'identify') {
+                isCorrect = answer === currentProblem.correct;
+            } else {
+                isCorrect = parseInt(answer) === currentProblem.correct;
+            }
+            
+            const feedbackEl = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('correct').textContent = correctCount;
+                feedbackEl.textContent = 'Great job! 🎉';
+                feedbackEl.className = 'feedback correct-feedback';
+                
+                // Highlight correct answer
+                event.target.classList.add('correct');
+            } else {
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                feedbackEl.textContent = `Not quite! Try again next time! 💪`;
+                feedbackEl.className = 'feedback incorrect-feedback';
+                
+                // Highlight wrong answer and show correct one
+                event.target.classList.add('incorrect');
+                
+                // Find and highlight correct answer
+                const buttons = document.querySelectorAll('.answer-btn');
+                buttons.forEach(btn => {
+                    let btnValue;
+                    if (currentMode === 'identify') {
+                        btnValue = btn.onclick.toString().match(/'([^']+)'/)[1];
+                        if (btnValue === currentProblem.correct) {
+                            btn.classList.add('correct');
+                        }
+                    } else {
+                        btnValue = parseInt(btn.onclick.toString().match(/\d+/)[0]);
+                        if (btnValue === currentProblem.correct) {
+                            btn.classList.add('correct');
+                        }
+                    }
+                });
+            }
+        }
+
+        function nextProblem() {
+            if (!hasAnswered) return;
+            generateProblem();
+        }
+
+        // Initialize
+        generateProblem();
+    </script>
+</body>
+</html>
