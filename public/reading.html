@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Time</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .reading-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .sidebar {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .sentence-display {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border: 4px solid #9f7aea;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(159, 122, 234, 0.2);
+        }
+
+        .sentence-text {
+            font-size: 3em;
+            color: #2d3748;
+            line-height: 1.4;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .word-highlight {
+            background: linear-gradient(135deg, #fed7d7 0%, #fbb6ce 100%);
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin: 0 4px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .progress-info {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .controls {
+            margin: 40px 0;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s;
+            box-shadow: 0 6px 12px rgba(159, 122, 234, 0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(159, 122, 234, 0.4);
+        }
+
+        .finished-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            margin-left: 15px;
+        }
+
+        .stats {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border-radius: 15px;
+            border-left: 5px solid #38b2ac;
+        }
+
+        .stats h3 {
+            color: #234e52;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 1.1em;
+            color: #2c7a7b;
+        }
+
+        .sidebar-title {
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .word-bank {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .word-bank h4 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .word-chip {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            color: #234e52;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border: 2px solid #38b2ac;
+        }
+
+        .reading-tips {
+            background: #fef5e7;
+            border: 2px solid #ed8936;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .reading-tips h4 {
+            color: #744210;
+            margin-bottom: 15px;
+        }
+
+        .reading-tips ul {
+            color: #744210;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .celebration h2 {
+            color: #38a169;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .celebration p {
+            font-size: 1.3em;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sentence-text {
+                font-size: 2.2em;
+                padding: 30px 20px;
+            }
+            
+            .sentence-display {
+                padding: 40px 20px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="hub.html" class="back-button">← Back to Hub</a>
+        <h1>📚 Reading Time 📚</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="reading-section">
+            <div class="progress-info" id="progressInfo">Sentence 1 of 20</div>
+            
+            <div class="sentence-display">
+                <div class="sentence-text" id="sentenceText">The cat sat on the mat.</div>
+            </div>
+            
+            <div class="controls">
+                <button class="next-btn" onclick="nextSentence()" id="nextBtn">Next Sentence →</button>
+                <button class="next-btn finished-btn" onclick="finishReading()" id="finishedBtn" style="display: none;">I'm Done Reading! 🎉</button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-title">Reading Progress</div>
+            
+            <div class="stats">
+                <h3>📊 Your Progress</h3>
+                <div class="stat-item">
+                    <span>Sentences Read:</span>
+                    <span id="sentencesRead">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Total Words:</span>
+                    <span id="totalWords">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Reading Level:</span>
+                    <span>Beginner</span>
+                </div>
+            </div>
+
+            <div class="word-bank">
+                <h4>📝 Words You've Read</h4>
+                <div class="word-list" id="wordList">
+                    <!-- Words will be added here -->
+                </div>
+            </div>
+
+            <div class="reading-tips">
+                <h4>💡 Reading Tips</h4>
+                <ul>
+                    <li>Read each word slowly</li>
+                    <li>Sound out new words</li>
+                    <li>Take your time</li>
+                    <li>Ask for help if stuck</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>🎉 Great Job Reading! 🎉</h2>
+            <p>You read <span id="finalSentenceCount">0</span> sentences!</p>
+            <p>Keep practicing to become an even better reader!</p>
+            <button class="next-btn" onclick="restartReading()">Read More Sentences</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSentenceIndex = 0;
+        let totalSentences = 20;
+        let sentencesRead = 0;
+        let totalWordsRead = 0;
+        let allWordsRead = new Set();
+
+        // Pre-written sentences with all words 5 characters or less
+        const sentences = [
+            // Animals
+            "The cat sits on a mat.",
+            "A dog runs in the yard.",
+            "My pet bird can sing songs.",
+            "The fish swim in a bowl.",
+            "I see a big red bird.",
+            "The horse runs very fast.",
+            "A frog jumps on a lily pad.",
+            "The duck swims in water.",
+            "My cat likes to sleep a lot.",
+            "The pig rolls in mud.",
+            
+            // Family and Friends
+            "Mom makes good food for us.",
+            "Dad reads me a story.",
+            "My baby sister likes to play.",
+            "I help mom cook dinner.",
+            "We play games after lunch.",
+            "My friend comes to visit me.",
+            "I love my family very much.",
+            "We go to the park today.",
+            "Mom and dad hug me tight.",
+            "I play with my toys all day.",
+            
+            // Daily Activities
+            "I brush my teeth every day.",
+            "We eat lunch at noon.",
+            "I like to read fun books.",
+            "My mom helps me get ready.",
+            "I wash my hands before meals.",
+            "We clean up our toys now.",
+            "I take a bath every night.",
+            "We go to bed when it's dark.",
+            "I put on my coat to go out.",
+            "We walk to the store today.",
+            
+            // Nature and Weather
+            "The sun is bright and warm.",
+            "It rains on the trees today.",
+            "I see clouds in the blue sky.",
+            "The wind blows the leaves.",
+            "Snow falls on the ground.",
+            "The moon comes out at night.",
+            "I like to play in the sun.",
+            "The grass grows green and tall.",
+            "Birds build nests in trees.",
+            "Water flows down the river.",
+            
+            // Food
+            "I eat an apple for lunch.",
+            "The cake tastes very sweet.",
+            "We drink milk with dinner.",
+            "I like to eat bread and jam.",
+            "The pizza has cheese on top.",
+            "Mom makes soup when I'm sick.",
+            "I help dad bake cookies.",
+            "We pick fresh fruit today.",
+            "The ice cream melts in the sun.",
+            "I pack lunch in my bag.",
+            
+            // Toys and Play
+            "My toy car goes very fast.",
+            "I build a tall tower with blocks.",
+            "The ball bounces up and down.",
+            "We play hide and seek outside.",
+            "My doll has a pretty dress.",
+            "I color with my new crayons.",
+            "The puzzle has many pieces.",
+            "We play catch in the yard.",
+            "My bike has two big wheels.",
+            "I draw a house with my pencil.",
+            
+            // School and Learning
+            "I learn new words at school.",
+            "The teacher reads us a story.",
+            "I write my name on paper.",
+            "We count to ten together.",
+            "My books are in my backpack.",
+            "I sit at my desk to work.",
+            "The clock shows what time it is.",
+            "I raise my hand to answer.",
+            "We sing songs in music class.",
+            "I like to learn about animals.",
+            
+            // Colors and Shapes
+            "I see a red car drive by.",
+            "The ball is round and blue.",
+            "My shirt is green and soft.",
+            "The box has four square sides.",
+            "I draw with a yellow crayon.",
+            "The flower is pink and pretty.",
+            "My hat is black and warm.",
+            "The star has five sharp points.",
+            "I like the color purple a lot.",
+            "The circle goes round and round.",
+            
+            // Transportation
+            "The bus takes kids to school.",
+            "A plane flies high in the sky.",
+            "The train moves on long tracks.",
+            "We ride in dad's blue car.",
+            "The boat floats on the water.",
+            "I see a truck carry boxes.",
+            "My scooter has two small wheels.",
+            "The taxi drives down the street.",
+            "We walk when the weather is nice.",
+            "The ferry crosses the big river.",
+            
+            // Simple Action Sentences
+            "I jump up and down for joy.",
+            "We run to catch the ball.",
+            "The baby crawls on the floor.",
+            "I skip to my friend's house.",
+            "We dance to the happy music.",
+            "I climb up the big tree.",
+            "The dog wags its tail a lot.",
+            "I clap my hands when I'm happy.",
+            "We march like we're in a parade.",
+            "I hop on one foot to play.",
+            
+            // More Variety
+            "The light turns on in my room.",
+            "I hear birds sing in the morning.",
+            "We smell flowers in the garden.",
+            "My shoes keep my feet warm.",
+            "The door opens when I push it.",
+            "I feel happy when I play outside.",
+            "We share our toys with friends.",
+            "The fire keeps us warm at night.",
+            "I watch the fish swim around.",
+            "My pillow is soft under my head."
+        ];
+
+        function generateSentence() {
+            return sentences[Math.floor(Math.random() * sentences.length)];
+        }
+
+        function displaySentence() {
+            const sentence = generateSentence();
+            const sentenceEl = document.getElementById('sentenceText');
+            
+            // Split sentence into words and highlight them
+            const words = sentence.split(' ');
+            const highlightedSentence = words.map(word => {
+                // Remove punctuation for word counting
+                const cleanWord = word.replace(/[.,!?]/g, '').toLowerCase();
+                allWordsRead.add(cleanWord);
+                return `<span class="word-highlight">${word}</span>`;
+            }).join(' ');
+            
+            sentenceEl.innerHTML = highlightedSentence;
+            
+            // Update word count
+            totalWordsRead += words.length;
+            document.getElementById('totalWords').textContent = totalWordsRead;
+            
+            // Update progress
+            document.getElementById('progressInfo').textContent = `Sentence ${currentSentenceIndex + 1} of ${totalSentences}`;
+            
+            // Update word bank
+            updateWordBank();
+        }
+
+        function updateWordBank() {
+            const wordListEl = document.getElementById('wordList');
+            const wordsArray = Array.from(allWordsRead).sort();
+            
+            // Show only last 12 words to keep it manageable
+            const recentWords = wordsArray.slice(-12);
+            
+            wordListEl.innerHTML = recentWords.map(word => 
+                `<span class="word-chip">${word}</span>`
+            ).join('');
+        }
+
+        function nextSentence() {
+            sentencesRead++;
+            currentSentenceIndex++;
+            
+            document.getElementById('sentencesRead').textContent = sentencesRead;
+            
+            if (currentSentenceIndex >= totalSentences) {
+                // Show finish button
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('finishedBtn').style.display = 'inline-block';
+                document.getElementById('progressInfo').textContent = 'Great job! You finished all sentences!';
+            } else {
+                displaySentence();
+            }
+        }
+
+        function finishReading() {
+            document.getElementById('finalSentenceCount').textContent = sentencesRead;
+            document.getElementById('celebration').style.display = 'flex';
+        }
+
+        function restartReading() {
+            currentSentenceIndex = 0;
+            sentencesRead = 0;
+            totalWordsRead = 0;
+            allWordsRead.clear();
+            
+            document.getElementById('sentencesRead').textContent = '0';
+            document.getElementById('totalWords').textContent = '0';
+            document.getElementById('wordList').innerHTML = '';
+            
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('finishedBtn').style.display = 'none';
+            document.getElementById('celebration').style.display = 'none';
+            
+            displaySentence();
+        }
+
+        // Initialize
+        displaySentence();
+    </script>
+</body>
+</html>
