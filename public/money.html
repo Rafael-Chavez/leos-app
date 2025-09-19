@@ -103,9 +103,18 @@
         }
 
         .coin-display {
-            font-size: 8em;
             margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .coin-display img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 4px 4px 15px rgba(0,0,0,0.3);
         }
 
         .bill-display {
@@ -236,9 +245,12 @@
         }
 
         .coin-icon {
-            font-size: 3em;
+            width: 60px;
+            height: 60px;
             margin-right: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
         }
 
         .coin-info {
@@ -309,7 +321,7 @@
             </div>
 
             <div class="problem-area" id="problemArea">
-                <div class="coin-display" id="moneyDisplay">🪙</div>
+                <div class="coin-display" id="moneyDisplay"><img src="images/coins/penny.png" alt="Coin"></div>
                 <div class="question" id="question">What coin is this?</div>
                 <div class="answer-buttons" id="answerButtons">
                     <button class="answer-btn" onclick="checkAnswer('penny')">Penny (1¢)</button>
@@ -339,7 +351,7 @@
                 <h3 style="color: #4a5568; margin-bottom: 15px;">Coins:</h3>
                 
                 <div class="coin-ref">
-                    <div class="coin-icon">🟤</div>
+                    <img src="images/coins/penny.png" alt="Penny" class="coin-icon">
                     <div class="coin-info">
                         <div class="coin-name">Penny</div>
                         <div class="coin-value">1¢ (1 cent)</div>
@@ -347,7 +359,7 @@
                 </div>
                 
                 <div class="coin-ref">
-                    <div class="coin-icon">⚪</div>
+                    <img src="images/coins/nickel.png" alt="Nickel" class="coin-icon">
                     <div class="coin-info">
                         <div class="coin-name">Nickel</div>
                         <div class="coin-value">5¢ (5 cents)</div>
@@ -355,7 +367,7 @@
                 </div>
                 
                 <div class="coin-ref">
-                    <div class="coin-icon">⚫</div>
+                    <img src="images/coins/dime.png" alt="Dime" class="coin-icon">
                     <div class="coin-info">
                         <div class="coin-name">Dime</div>
                         <div class="coin-value">10¢ (10 cents)</div>
@@ -363,7 +375,7 @@
                 </div>
                 
                 <div class="coin-ref">
-                    <div class="coin-icon">⚪</div>
+                    <img src="images/coins/quarter.png" alt="Quarter" class="coin-icon">
                     <div class="coin-info">
                         <div class="coin-name">Quarter</div>
                         <div class="coin-value">25¢ (25 cents)</div>
@@ -402,10 +414,10 @@
         let hasAnswered = false;
 
         const coins = [
-            { name: 'penny', display: '🟤', value: 1, label: 'Penny (1¢)' },
-            { name: 'nickel', display: '⚪', value: 5, label: 'Nickel (5¢)' },
-            { name: 'dime', display: '⚫', value: 10, label: 'Dime (10¢)' },
-            { name: 'quarter', display: '⚪', value: 25, label: 'Quarter (25¢)' }
+            { name: 'penny', display: 'images/coins/penny.png', value: 1, label: 'Penny (1¢)' },
+            { name: 'nickel', display: 'images/coins/nickel.png', value: 5, label: 'Nickel (5¢)' },
+            { name: 'dime', display: 'images/coins/dime.png', value: 10, label: 'Dime (10¢)' },
+            { name: 'quarter', display: 'images/coins/quarter.png', value: 25, label: 'Quarter (25¢)' }
         ];
 
         const bills = [
@@ -460,7 +472,7 @@
                 document.getElementById('question').textContent = 'What bill is this?';
             } else {
                 displayEl.className = 'coin-display';
-                displayEl.textContent = randomMoney.display;
+                displayEl.innerHTML = `<img src="${randomMoney.display}" alt="${randomMoney.label}">`;
                 document.getElementById('question').textContent = 'What coin is this?';
             }
 
@@ -498,7 +510,7 @@
             };
 
             document.getElementById('moneyDisplay').className = 'coin-display';
-            document.getElementById('moneyDisplay').innerHTML = selectedCoins.map(c => c.display).join(' ');
+            document.getElementById('moneyDisplay').innerHTML = selectedCoins.map(c => `<img src="${c.display}" alt="${c.label}" style="width: 100px; height: 100px; margin: 5px; border-radius: 50%; object-fit: cover; box-shadow: 2px 2px 8px rgba(0,0,0,0.3);">`).join(' ');
             document.getElementById('question').textContent = 'How much money is this?';
 
             // Create multiple choice answers
