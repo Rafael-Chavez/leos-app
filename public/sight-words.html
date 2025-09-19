@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sight Words - Leo's Math Hub</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #3182ce;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .back-button {
+            background: #718096;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: #4a5568;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mode-button {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-button.active {
+            background: #3182ce;
+            color: white;
+        }
+
+        .mode-button:hover {
+            background: #4299e1;
+            color: white;
+        }
+
+        .flashcard-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .flashcard {
+            background: #f7fafc;
+            border: 3px solid #3182ce;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 0 auto;
+            max-width: 400px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .sight-word {
+            font-size: 4em;
+            font-weight: bold;
+            color: #2d3748;
+            text-transform: lowercase;
+        }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .control-button {
+            background: #3182ce;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3em;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            transition: background 0.3s;
+        }
+
+        .control-button:hover {
+            background: #2c5aa0;
+        }
+
+        .control-button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+        }
+
+        .timed-mode {
+            text-align: center;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .timer-setting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer-setting label {
+            font-size: 1.2em;
+            color: #4a5568;
+        }
+
+        .timer-setting select {
+            padding: 8px 12px;
+            font-size: 1.1em;
+            border: 2px solid #cbd5e0;
+            border-radius: 5px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .timer-display {
+            font-size: 1.5em;
+            color: #3182ce;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #3182ce;
+            height: 100%;
+            transition: width 0.1s linear;
+            border-radius: 10px;
+        }
+
+        .word-counter {
+            font-size: 1.2em;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .start-button {
+            background: #38a169;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3em;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .start-button:hover {
+            background: #2f855a;
+        }
+
+        .stop-button {
+            background: #e53e3e;
+        }
+
+        .stop-button:hover {
+            background: #c53030;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👁️ Sight Words 👁️</h1>
+
+        <div class="controls">
+            <a href="index.html" class="back-button">← Back to Hub</a>
+            <div class="mode-selector">
+                <button class="mode-button active" onclick="switchMode('flashcards')">Interactive Flashcards</button>
+                <button class="mode-button" onclick="switchMode('timed')">Timed Practice</button>
+            </div>
+        </div>
+
+        <!-- Interactive Flashcards Mode -->
+        <div id="flashcards-mode" class="flashcard-container">
+            <div class="flashcard" onclick="nextWord()">
+                <div class="sight-word" id="current-word">the</div>
+            </div>
+            <div class="flashcard-controls">
+                <button class="control-button" onclick="previousWord()">← Previous</button>
+                <button class="control-button" onclick="shuffleWords()">🔀 Shuffle</button>
+                <button class="control-button" onclick="nextWord()">Next →</button>
+            </div>
+            <div class="word-counter">
+                Word <span id="word-number">1</span> of <span id="total-words">220</span>
+            </div>
+        </div>
+
+        <!-- Timed Mode -->
+        <div id="timed-mode" class="timed-mode hidden">
+            <div class="timer-controls">
+                <div class="timer-setting">
+                    <label for="word-duration">Seconds per word:</label>
+                    <select id="word-duration">
+                        <option value="2">2 seconds</option>
+                        <option value="3" selected>3 seconds</option>
+                        <option value="4">4 seconds</option>
+                        <option value="5">5 seconds</option>
+                    </select>
+                </div>
+                <button id="start-stop-btn" class="control-button start-button" onclick="toggleTimer()">Start Practice</button>
+            </div>
+
+            <div id="timer-display" class="timer-display hidden">
+                Time left: <span id="time-remaining">3</span>s
+            </div>
+
+            <div class="flashcard" id="timed-flashcard">
+                <div class="sight-word" id="timed-word">Ready?</div>
+            </div>
+
+            <div class="progress-bar hidden" id="progress-container">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+
+            <div class="word-counter">
+                <span id="timed-word-number">0</span> words completed
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dolch Sight Words - Pre-primer through 3rd grade
+        const sightWords = [
+            // Pre-primer (40 words)
+            'a', 'and', 'away', 'big', 'blue', 'can', 'come', 'down', 'find', 'for',
+            'funny', 'go', 'help', 'here', 'i', 'in', 'is', 'it', 'jump', 'little',
+            'look', 'make', 'me', 'my', 'not', 'one', 'play', 'red', 'run', 'said',
+            'see', 'the', 'three', 'to', 'two', 'up', 'we', 'where', 'yellow', 'you',
+
+            // Primer (52 words)
+            'all', 'am', 'are', 'at', 'ate', 'be', 'black', 'brown', 'but', 'came',
+            'did', 'do', 'eat', 'four', 'get', 'good', 'have', 'he', 'into', 'like',
+            'must', 'new', 'no', 'now', 'on', 'our', 'out', 'please', 'pretty', 'ran',
+            'ride', 'saw', 'say', 'she', 'so', 'soon', 'that', 'there', 'they', 'this',
+            'too', 'under', 'want', 'was', 'well', 'went', 'what', 'white', 'who', 'will',
+            'with', 'yes',
+
+            // First Grade (41 words)
+            'after', 'again', 'an', 'any', 'as', 'ask', 'by', 'could', 'every', 'fly',
+            'from', 'give', 'giving', 'had', 'has', 'her', 'him', 'his', 'how', 'just',
+            'know', 'let', 'live', 'may', 'of', 'old', 'once', 'open', 'over', 'put',
+            'round', 'some', 'stop', 'take', 'thank', 'them', 'think', 'walk', 'were', 'when',
+            'your',
+
+            // Second Grade (46 words)
+            'always', 'around', 'because', 'been', 'before', 'best', 'both', 'buy', 'call', 'cold',
+            'does', 'don\'t', 'fast', 'first', 'five', 'found', 'gave', 'goes', 'green', 'its',
+            'made', 'many', 'off', 'or', 'pull', 'read', 'right', 'sing', 'sit', 'sleep',
+            'tell', 'their', 'these', 'those', 'upon', 'us', 'use', 'very', 'wash', 'which',
+            'why', 'wish', 'work', 'would', 'write', 'your',
+
+            // Third Grade (41 words)
+            'about', 'better', 'bring', 'carry', 'clean', 'cut', 'done', 'draw', 'drink', 'eight',
+            'fall', 'far', 'full', 'got', 'grow', 'hold', 'hot', 'hurt', 'if', 'keep',
+            'kind', 'laugh', 'light', 'long', 'much', 'myself', 'never', 'only', 'own', 'pick',
+            'seven', 'shall', 'show', 'six', 'small', 'start', 'ten', 'today', 'together', 'try',
+            'warm'
+        ];
+
+        let currentIndex = 0;
+        let isTimerRunning = false;
+        let timerInterval = null;
+        let timeRemaining = 3;
+        let wordsCompleted = 0;
+        let currentMode = 'flashcards';
+
+        // Initialize
+        updateWordDisplay();
+        updateCounter();
+
+        function switchMode(mode) {
+            currentMode = mode;
+
+            // Update button states
+            document.querySelectorAll('.mode-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide appropriate sections
+            if (mode === 'flashcards') {
+                document.getElementById('flashcards-mode').classList.remove('hidden');
+                document.getElementById('timed-mode').classList.add('hidden');
+                stopTimer();
+            } else {
+                document.getElementById('flashcards-mode').classList.add('hidden');
+                document.getElementById('timed-mode').classList.remove('hidden');
+                resetTimedMode();
+            }
+        }
+
+        function updateWordDisplay() {
+            document.getElementById('current-word').textContent = sightWords[currentIndex];
+        }
+
+        function updateCounter() {
+            document.getElementById('word-number').textContent = currentIndex + 1;
+            document.getElementById('total-words').textContent = sightWords.length;
+        }
+
+        function nextWord() {
+            currentIndex = (currentIndex + 1) % sightWords.length;
+            updateWordDisplay();
+            updateCounter();
+        }
+
+        function previousWord() {
+            currentIndex = currentIndex === 0 ? sightWords.length - 1 : currentIndex - 1;
+            updateWordDisplay();
+            updateCounter();
+        }
+
+        function shuffleWords() {
+            // Fisher-Yates shuffle
+            for (let i = sightWords.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [sightWords[i], sightWords[j]] = [sightWords[j], sightWords[i]];
+            }
+            currentIndex = 0;
+            updateWordDisplay();
+            updateCounter();
+        }
+
+        // Timed Mode Functions
+        function toggleTimer() {
+            if (isTimerRunning) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            isTimerRunning = true;
+            wordsCompleted = 0;
+            currentIndex = 0;
+
+            const duration = parseInt(document.getElementById('word-duration').value);
+            timeRemaining = duration;
+
+            document.getElementById('start-stop-btn').textContent = 'Stop Practice';
+            document.getElementById('start-stop-btn').classList.remove('start-button');
+            document.getElementById('start-stop-btn').classList.add('stop-button');
+
+            document.getElementById('timer-display').classList.remove('hidden');
+            document.getElementById('progress-container').classList.remove('hidden');
+
+            showNextTimedWord();
+            startWordTimer();
+        }
+
+        function stopTimer() {
+            isTimerRunning = false;
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            document.getElementById('start-stop-btn').textContent = 'Start Practice';
+            document.getElementById('start-stop-btn').classList.remove('stop-button');
+            document.getElementById('start-stop-btn').classList.add('start-button');
+
+            document.getElementById('timer-display').classList.add('hidden');
+            document.getElementById('progress-container').classList.add('hidden');
+
+            resetTimedMode();
+        }
+
+        function resetTimedMode() {
+            document.getElementById('timed-word').textContent = 'Ready?';
+            document.getElementById('timed-word-number').textContent = '0';
+            document.getElementById('progress-bar').style.width = '0%';
+            wordsCompleted = 0;
+        }
+
+        function showNextTimedWord() {
+            if (!isTimerRunning) return;
+
+            // Get a random word instead of sequential
+            const randomIndex = Math.floor(Math.random() * sightWords.length);
+            document.getElementById('timed-word').textContent = sightWords[randomIndex];
+            wordsCompleted++;
+            document.getElementById('timed-word-number').textContent = wordsCompleted;
+        }
+
+        function startWordTimer() {
+            if (!isTimerRunning) return;
+
+            // Clear any existing timer to prevent multiple timers
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            const duration = parseInt(document.getElementById('word-duration').value);
+            timeRemaining = duration;
+            document.getElementById('time-remaining').textContent = timeRemaining;
+
+            document.getElementById('progress-bar').style.width = '100%';
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                document.getElementById('time-remaining').textContent = timeRemaining;
+
+                // Update progress bar
+                const progress = (timeRemaining / duration) * 100;
+                document.getElementById('progress-bar').style.width = progress + '%';
+
+                if (timeRemaining <= 0) {
+                    // Clear the current timer before starting a new word
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+
+                    showNextTimedWord();
+                    startWordTimer();
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
