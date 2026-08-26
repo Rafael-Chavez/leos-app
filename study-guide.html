@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Study Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .question-container {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .place-value-chart {
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        .place-value-chart td {
+            border: 2px solid #333;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            min-width: 100px;
+        }
+        .place-value-chart .header {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        .place-value-chart .acronym {
+            background-color: #e8f5e9;
+            font-weight: bold;
+        }
+        .options {
+            margin-top: 15px;
+        }
+        .option {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .option:hover {
+            background-color: #e3f2fd;
+        }
+        .option input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .generate-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .generate-btn:hover {
+            background-color: #45a049;
+        }
+        .check-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .check-btn:hover {
+            background-color: #0b7dda;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .price-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        .price-table td {
+            border: 2px solid #333;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            min-width: 150px;
+        }
+        .price-table .header {
+            background-color: #2196F3;
+            color: white;
+            font-weight: bold;
+        }
+        .comparison-input {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .comparison-input input {
+            width: 60px;
+            text-align: center;
+            font-size: 20px;
+            padding: 5px;
+        }
+        .comparison-input select {
+            font-size: 20px;
+            padding: 5px;
+            margin: 0 10px;
+        }
+        .bar-graph {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .bar-graph-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .bar-label {
+            min-width: 120px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .bar-container {
+            flex: 1;
+            height: 40px;
+            background-color: #f0f0f0;
+            border: 2px solid #333;
+            position: relative;
+            border-radius: 5px;
+        }
+        .bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            border-right: 3px solid #2d6b2f;
+        }
+        .bar-value {
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 135px;
+            margin-top: 0;
+            padding-right: 20px;
+        }
+        .scale-mark {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .scale-mark::before {
+            content: '|';
+            font-size: 18px;
+            line-height: 1;
+            font-weight: bold;
+        }
+        .text-input {
+            font-size: 18px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            width: 150px;
+        }
+        .part-label {
+            font-weight: bold;
+            color: #2196F3;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Math Study Guide</h1>
+    <button class="generate-btn" onclick="generateNewQuestions()">Generate New Questions</button>
+
+    <!-- Question 1: Place Value -->
+    <div class="question-container">
+        <h2>Question 1: Place Value</h2>
+        <p>Look at the number in the place value chart below.</p>
+        <table class="place-value-chart">
+            <tr>
+                <td class="header">Hundreds</td>
+                <td class="header">Tens</td>
+                <td class="header">Ones</td>
+            </tr>
+            <tr>
+                <td class="acronym">H</td>
+                <td class="acronym">T</td>
+                <td class="acronym">O</td>
+            </tr>
+            <tr>
+                <td id="q1-hundreds">1</td>
+                <td id="q1-tens">2</td>
+                <td id="q1-ones">3</td>
+            </tr>
+        </table>
+        <p><strong>What are different ways to represent this number? Choose THREE that are correct.</strong></p>
+        <div class="options" id="q1-options"></div>
+        <button class="check-btn" onclick="checkQuestion1()">Check Answer</button>
+        <div class="feedback" id="q1-feedback"></div>
+    </div>
+
+    <!-- Question 2: Addition -->
+    <div class="question-container">
+        <h2>Question 2: Addition Problem</h2>
+        <p id="q2-text">On Monday, David read 348 pages of his book. On Tuesday, he read 105 pages. How many pages did David read over the two days?</p>
+        <div class="options">
+            <div class="option">
+                <input type="radio" name="q2" id="q2-a" value="a">
+                <label for="q2-a" id="q2-label-a">453 pages</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q2" id="q2-b" value="b">
+                <label for="q2-b" id="q2-label-b">243 pages</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q2" id="q2-c" value="c">
+                <label for="q2-c" id="q2-label-c">543 pages</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q2" id="q2-d" value="d">
+                <label for="q2-d" id="q2-label-d">353 pages</label>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkQuestion2()">Check Answer</button>
+        <div class="feedback" id="q2-feedback"></div>
+    </div>
+
+    <!-- Question 3: Comparison -->
+    <div class="question-container">
+        <h2>Question 3: Number Comparison</h2>
+        <p>The prices of two game systems are shown in the table below.</p>
+        <table class="price-table">
+            <tr>
+                <td class="header">PlayStation</td>
+                <td class="header">Xbox</td>
+            </tr>
+            <tr>
+                <td id="q3-ps">$359</td>
+                <td id="q3-xbox">$398</td>
+            </tr>
+        </table>
+        <p><strong>Write a comparison statement using &lt;, &gt;, or =</strong></p>
+        <div class="comparison-input">
+            <span id="q3-price1">359</span>
+            <select id="q3-comparison">
+                <option value="">Choose...</option>
+                <option value="<">&lt;</option>
+                <option value=">">&gt;</option>
+                <option value="=">=</option>
+            </select>
+            <span id="q3-price2">398</span>
+        </div>
+        <button class="check-btn" onclick="checkQuestion3()">Check Answer</button>
+        <div class="feedback" id="q3-feedback"></div>
+    </div>
+
+    <!-- Question 4: Bar Graph -->
+    <div class="question-container">
+        <h2>Question 4: Data Analysis</h2>
+        <p id="q4-text">Third grade students at Harris Elementary School collected data on their favorite lunch choices. The data is shown in the bar graph below.</p>
+        <div class="bar-graph" id="q4-graph">
+            <div class="bar-graph-inner">
+                <div class="bar-row">
+                    <div class="bar-label" id="q4-label1">Hamburger</div>
+                    <div class="bar-container">
+                        <div class="bar" id="q4-bar1" style="width: 50%;">
+                            <span class="bar-value" id="q4-val1">50</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label" id="q4-label2">Sandwich</div>
+                    <div class="bar-container">
+                        <div class="bar" id="q4-bar2" style="width: 20%;">
+                            <span class="bar-value" id="q4-val2">20</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label" id="q4-label3">Pizza</div>
+                    <div class="bar-container">
+                        <div class="bar" id="q4-bar3" style="width: 80%;">
+                            <span class="bar-value" id="q4-val3">80</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label" id="q4-label4">Spaghetti</div>
+                    <div class="bar-container">
+                        <div class="bar" id="q4-bar4" style="width: 30%;">
+                            <span class="bar-value" id="q4-val4">30</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scale-container">
+                <span class="scale-mark">0</span>
+                <span class="scale-mark">10</span>
+                <span class="scale-mark">20</span>
+                <span class="scale-mark">30</span>
+                <span class="scale-mark">40</span>
+                <span class="scale-mark">50</span>
+                <span class="scale-mark">60</span>
+                <span class="scale-mark">70</span>
+                <span class="scale-mark">80</span>
+                <span class="scale-mark">90</span>
+                <span class="scale-mark">100</span>
+            </div>
+        </div>
+        <div class="part-label">Part A:</div>
+        <p>How many more students like <span id="q4-item1">pizza</span> than <span id="q4-item2">sandwiches</span>?</p>
+        <input type="text" class="text-input" id="q4-partA" placeholder="Enter answer">
+        <div class="part-label">Part B:</div>
+        <p>How many students were surveyed?</p>
+        <input type="text" class="text-input" id="q4-partB" placeholder="Enter answer">
+        <button class="check-btn" onclick="checkQuestion4()">Check Answer</button>
+        <div class="feedback" id="q4-feedback"></div>
+    </div>
+
+    <!-- Question 5: Number Forms -->
+    <div class="question-container">
+        <h2>Question 5: Number Forms</h2>
+        <p>Represent the number <strong id="q5-word">Four Hundred Fifteen</strong> in standard form and expanded form.</p>
+        <div class="part-label">Standard Form:</div>
+        <input type="text" class="text-input" id="q5-standard" placeholder="e.g., 415">
+        <div class="part-label">Expanded Form:</div>
+        <input type="text" class="text-input" id="q5-expanded" placeholder="e.g., 400 + 10 + 5" style="width: 300px;">
+        <button class="check-btn" onclick="checkQuestion5()">Check Answer</button>
+        <div class="feedback" id="q5-feedback"></div>
+    </div>
+
+    <!-- Question 6: Subtraction -->
+    <div class="question-container">
+        <h2>Question 6: Subtraction Problem</h2>
+        <p id="q6-text">Mary wins 573 tickets while playing arcade games. She uses 131 tickets to get a prize. How many tickets does Mary have left?</p>
+        <div class="options">
+            <div class="option">
+                <input type="radio" name="q6" id="q6-a" value="a">
+                <label for="q6-a" id="q6-label-a">442</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q6" id="q6-b" value="b">
+                <label for="q6-b" id="q6-label-b">704</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q6" id="q6-c" value="c">
+                <label for="q6-c" id="q6-label-c">604</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q6" id="q6-d" value="d">
+                <label for="q6-d" id="q6-label-d">342</label>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkQuestion6()">Check Answer</button>
+        <div class="feedback" id="q6-feedback"></div>
+    </div>
+
+    <!-- Question 7: Expression Comparison -->
+    <div class="question-container">
+        <h2>Question 7: Expression Comparison</h2>
+        <p>Which comparison symbol makes the following statement true?</p>
+        <div style="font-size: 20px; margin: 20px 0; text-align: center;">
+            <span id="q7-left">90 + 3 + 500</span>
+            <select id="q7-symbol" style="font-size: 24px; margin: 0 15px; padding: 5px;">
+                <option value="">?</option>
+                <option value=">">&gt;</option>
+                <option value="<">&lt;</option>
+                <option value="=">=</option>
+                <option value="+">+</option>
+            </select>
+            <span id="q7-right">5 hundreds, 3 ones, 9 tens</span>
+        </div>
+        <button class="check-btn" onclick="checkQuestion7()">Check Answer</button>
+        <div class="feedback" id="q7-feedback"></div>
+    </div>
+
+    <!-- Question 8: Cafeteria Addition -->
+    <div class="question-container">
+        <h2>Question 8: Addition Problem</h2>
+        <p id="q8-text">At breakfast, the school cafeteria sold 327 chocolate milk cartons and 151 whole milk cartons. How many milk cartons were sold at breakfast?</p>
+        <div class="options">
+            <div class="option">
+                <input type="radio" name="q8" id="q8-a" value="a">
+                <label for="q8-a" id="q8-label-a">478</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q8" id="q8-b" value="b">
+                <label for="q8-b" id="q8-label-b">176</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q8" id="q8-c" value="c">
+                <label for="q8-c" id="q8-label-c">578</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q8" id="q8-d" value="d">
+                <label for="q8-d" id="q8-label-d">378</label>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkQuestion8()">Check Answer</button>
+        <div class="feedback" id="q8-feedback"></div>
+    </div>
+
+    <!-- Question 9: Book Reading Contest -->
+    <div class="question-container">
+        <h2>Question 9: Book Reading Contest</h2>
+        <p id="q9-intro">Douglas Elementary School is having a book reading contest. Use the table to answer the questions.</p>
+        <table class="price-table" style="margin: 20px auto;">
+            <tr>
+                <td class="header">Grade Level</td>
+                <td class="header">Total Number of Books Read</td>
+            </tr>
+            <tr>
+                <td>Second</td>
+                <td id="q9-second">256</td>
+            </tr>
+            <tr>
+                <td>Third</td>
+                <td id="q9-third">293</td>
+            </tr>
+            <tr>
+                <td>Fourth</td>
+                <td id="q9-fourth">412</td>
+            </tr>
+        </table>
+        <div class="part-label">Part A:</div>
+        <p>How many fewer books did <span id="q9-grade1">third grade</span> read than <span id="q9-grade2">fourth grade</span>?</p>
+        <input type="text" class="text-input" id="q9-partA" placeholder="Enter answer">
+        <div class="part-label">Part B:</div>
+        <p><span id="q9-grade3">Second grade</span> has a goal of reading <span id="q9-goal">500</span> books in all. How many more books will <span id="q9-grade4">second graders</span> need to read to reach their goal?</p>
+        <input type="text" class="text-input" id="q9-partB" placeholder="Enter answer">
+        <button class="check-btn" onclick="checkQuestion9()">Check Answer</button>
+        <div class="feedback" id="q9-feedback"></div>
+    </div>
+
+    <!-- Question 10: Popcorn Sales -->
+    <div class="question-container">
+        <h2>Question 10: Subtraction Problem</h2>
+        <p id="q10-text">Kindergarten and first grade students are competing to sell the most popcorn. In total, the kindergarteners and first graders sold 696 bags of popcorn. If the kindergarteners sold 354 bags of popcorn, how many bags did the first graders sell?</p>
+        <div class="options">
+            <div class="option">
+                <input type="radio" name="q10" id="q10-a" value="a">
+                <label for="q10-a" id="q10-label-a">217 bags of popcorn</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q10" id="q10-b" value="b">
+                <label for="q10-b" id="q10-label-b">242 bags of popcorn</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q10" id="q10-c" value="c">
+                <label for="q10-c" id="q10-label-c">342 bags of popcorn</label>
+            </div>
+            <div class="option">
+                <input type="radio" name="q10" id="q10-d" value="d">
+                <label for="q10-d" id="q10-label-d">1050 bags of popcorn</label>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkQuestion10()">Check Answer</button>
+        <div class="feedback" id="q10-feedback"></div>
+    </div>
+
+    <script>
+        let currentQuestions = {};
+
+        // Generate random 3-digit number
+        function randomThreeDigit() {
+            return Math.floor(100 + Math.random() * 900);
+        }
+
+        // Generate random 2 or 3 digit number
+        function randomNumber(min, max) {
+            return Math.floor(min + Math.random() * (max - min + 1));
+        }
+
+        // Shuffle array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Question 1: Place Value
+        function generateQuestion1() {
+            const num = randomThreeDigit();
+            const hundreds = Math.floor(num / 100);
+            const tens = Math.floor((num % 100) / 10);
+            const ones = num % 10;
+
+            currentQuestions.q1 = {
+                hundreds: hundreds,
+                tens: tens,
+                ones: ones,
+                number: num
+            };
+
+            document.getElementById('q1-hundreds').textContent = hundreds;
+            document.getElementById('q1-tens').textContent = tens;
+            document.getElementById('q1-ones').textContent = ones;
+
+            // Generate options
+            const options = [
+                { text: `${num}`, correct: true },
+                { text: `${hundreds} hundreds, ${tens} tens, ${ones} ones`, correct: true },
+                { text: `${hundreds} hundreds, ${ones} tens, ${tens} ones`, correct: false },
+                { text: `${hundreds * 100} + ${tens * 10} + ${ones}`, correct: true },
+                { text: `${tens * 10} + ${hundreds * 100} + ${ones}`, correct: true },
+                { text: `${num + 100}`, correct: false }
+            ];
+
+            const shuffledOptions = shuffle(options);
+            const optionsHtml = shuffledOptions.map((opt, idx) => `
+                <div class="option">
+                    <input type="checkbox" id="q1-opt-${idx}" value="${opt.correct}">
+                    <label for="q1-opt-${idx}">${String.fromCharCode(65 + idx)}. ${opt.text}</label>
+                </div>
+            `).join('');
+
+            document.getElementById('q1-options').innerHTML = optionsHtml;
+        }
+
+        function checkQuestion1() {
+            const checkboxes = document.querySelectorAll('#q1-options input[type="checkbox"]');
+            let selectedCorrect = 0;
+            let selectedIncorrect = 0;
+            let totalSelected = 0;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    totalSelected++;
+                    if (cb.value === 'true') {
+                        selectedCorrect++;
+                    } else {
+                        selectedIncorrect++;
+                    }
+                }
+            });
+
+            const feedback = document.getElementById('q1-feedback');
+
+            if (totalSelected === 3 && selectedCorrect === 3 && selectedIncorrect === 0) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = 'Correct! You selected three valid representations of the number.';
+            } else if (totalSelected !== 3) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Please select exactly 3 options. You selected ${totalSelected}.`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Not quite right. Check your selections again.';
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 2: Addition
+        function generateQuestion2() {
+            const names = ['David', 'Emma', 'Sarah', 'Michael', 'Olivia', 'James'];
+            const days = [
+                ['Monday', 'Tuesday'],
+                ['Wednesday', 'Thursday'],
+                ['Saturday', 'Sunday'],
+                ['Tuesday', 'Wednesday']
+            ];
+
+            const name = names[Math.floor(Math.random() * names.length)];
+            const dayPair = days[Math.floor(Math.random() * days.length)];
+            const num1 = randomNumber(100, 500);
+            const num2 = randomNumber(50, 300);
+            const correctAnswer = num1 + num2;
+
+            currentQuestions.q2 = {
+                num1: num1,
+                num2: num2,
+                answer: correctAnswer
+            };
+
+            document.getElementById('q2-text').textContent =
+                `On ${dayPair[0]}, ${name} read ${num1} pages of his book. On ${dayPair[1]}, he read ${num2} pages. How many pages did ${name} read over the two days?`;
+
+            // Generate wrong answers
+            const wrongAnswers = [
+                Math.abs(num1 - num2), // difference
+                correctAnswer + 100,    // too high
+                correctAnswer - 100     // too low
+            ];
+
+            const allAnswers = shuffle([
+                { value: correctAnswer, correct: true },
+                { value: wrongAnswers[0], correct: false },
+                { value: wrongAnswers[1], correct: false },
+                { value: wrongAnswers[2], correct: false }
+            ]);
+
+            const labels = ['a', 'b', 'c', 'd'];
+            allAnswers.forEach((ans, idx) => {
+                document.getElementById(`q2-label-${labels[idx]}`).textContent = `${ans.value} pages`;
+                document.getElementById(`q2-${labels[idx]}`).dataset.correct = ans.correct;
+            });
+        }
+
+        function checkQuestion2() {
+            const selected = document.querySelector('input[name="q2"]:checked');
+            const feedback = document.getElementById('q2-feedback');
+
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please select an answer.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            if (selected.dataset.correct === 'true') {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${currentQuestions.q2.num1} + ${currentQuestions.q2.num2} = ${currentQuestions.q2.answer}`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Not quite. Try adding ${currentQuestions.q2.num1} + ${currentQuestions.q2.num2} again.`;
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 3: Comparison
+        function generateQuestion3() {
+            const systems = [
+                ['PlayStation', 'Xbox'],
+                ['Nintendo Switch', 'PlayStation'],
+                ['Xbox Series X', 'Nintendo Switch'],
+                ['Gaming PC', 'Laptop']
+            ];
+
+            const pair = systems[Math.floor(Math.random() * systems.length)];
+            const price1 = randomNumber(200, 500);
+            const price2 = randomNumber(200, 500);
+
+            currentQuestions.q3 = {
+                price1: price1,
+                price2: price2,
+                answer: price1 < price2 ? '<' : price1 > price2 ? '>' : '='
+            };
+
+            document.querySelector('.price-table tr:first-child td:first-child').textContent = pair[0];
+            document.querySelector('.price-table tr:first-child td:last-child').textContent = pair[1];
+            document.getElementById('q3-ps').textContent = `$${price1}`;
+            document.getElementById('q3-xbox').textContent = `$${price2}`;
+            document.getElementById('q3-price1').textContent = price1;
+            document.getElementById('q3-price2').textContent = price2;
+            document.getElementById('q3-comparison').value = '';
+        }
+
+        function checkQuestion3() {
+            const selected = document.getElementById('q3-comparison').value;
+            const feedback = document.getElementById('q3-feedback');
+
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please select a comparison symbol.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            if (selected === currentQuestions.q3.answer) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${currentQuestions.q3.price1} ${currentQuestions.q3.answer} ${currentQuestions.q3.price2}`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Not quite. Compare ${currentQuestions.q3.price1} and ${currentQuestions.q3.price2} again.`;
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 4: Bar Graph
+        function generateQuestion4() {
+            const schools = ['Harris Elementary School', 'Lincoln Elementary School', 'Washington Elementary School', 'Jefferson Elementary School'];
+            const foodCategories = [
+                ['Hamburger', 'Sandwich', 'Pizza', 'Spaghetti'],
+                ['Tacos', 'Salad', 'Pizza', 'Chicken Nuggets'],
+                ['Hot Dog', 'Pizza', 'Mac and Cheese', 'Burrito'],
+                ['Pizza', 'Grilled Cheese', 'Sushi', 'Pasta']
+            ];
+
+            const school = schools[Math.floor(Math.random() * schools.length)];
+            const foods = foodCategories[Math.floor(Math.random() * foodCategories.length)];
+
+            // Generate values with max of 100
+            const values = [
+                randomNumber(20, 90),
+                randomNumber(10, 80),
+                randomNumber(30, 95),
+                randomNumber(15, 75)
+            ];
+
+            // Find the max value to scale the graph properly
+            const maxValue = Math.max(...values);
+            const scale = maxValue > 100 ? 100 : 100; // Always scale to 100
+
+            currentQuestions.q4 = {
+                values: values,
+                foods: foods,
+                total: values.reduce((a, b) => a + b, 0)
+            };
+
+            document.getElementById('q4-text').textContent =
+                `Third grade students at ${school} collected data on their favorite lunch choices. The data is shown in the bar graph below.`;
+
+            // Update bar graph - scale based on the maximum value in the dataset
+            for (let i = 0; i < 4; i++) {
+                // Calculate width as a percentage of the max value (100)
+                const widthPercentage = (values[i] / scale) * 100;
+                document.getElementById(`q4-bar${i + 1}`).style.width = `${widthPercentage}%`;
+                document.getElementById(`q4-val${i + 1}`).textContent = values[i];
+                document.getElementById(`q4-label${i + 1}`).textContent = foods[i];
+            }
+
+            // Randomly select two items to compare
+            let idx1 = Math.floor(Math.random() * 4);
+            let idx2 = Math.floor(Math.random() * 4);
+            while (idx1 === idx2) {
+                idx2 = Math.floor(Math.random() * 4);
+            }
+
+            // Make sure idx1 has the higher value
+            if (values[idx1] < values[idx2]) {
+                [idx1, idx2] = [idx2, idx1];
+            }
+
+            currentQuestions.q4.difference = values[idx1] - values[idx2];
+            document.getElementById('q4-item1').textContent = foods[idx1];
+            document.getElementById('q4-item2').textContent = foods[idx2];
+            document.getElementById('q4-partA').value = '';
+            document.getElementById('q4-partB').value = '';
+        }
+
+        function checkQuestion4() {
+            const partA = document.getElementById('q4-partA').value.trim();
+            const partB = document.getElementById('q4-partB').value.trim();
+            const feedback = document.getElementById('q4-feedback');
+
+            if (!partA || !partB) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please answer both Part A and Part B.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            const answerA = parseInt(partA);
+            const answerB = parseInt(partB);
+
+            if (answerA === currentQuestions.q4.difference && answerB === currentQuestions.q4.total) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! The difference is ${currentQuestions.q4.difference} and the total is ${currentQuestions.q4.total}.`;
+            } else if (answerA !== currentQuestions.q4.difference && answerB === currentQuestions.q4.total) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Part B is correct! But check Part A again.`;
+            } else if (answerA === currentQuestions.q4.difference && answerB !== currentQuestions.q4.total) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Part A is correct! But check Part B again.`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Both answers need correction. Try again!';
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 5: Number Forms
+        function generateQuestion5() {
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+            const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            const hundreds = ['', 'One Hundred', 'Two Hundred', 'Three Hundred', 'Four Hundred', 'Five Hundred', 'Six Hundred', 'Seven Hundred', 'Eight Hundred', 'Nine Hundred'];
+
+            const num = randomThreeDigit();
+            const h = Math.floor(num / 100);
+            const t = Math.floor((num % 100) / 10);
+            const o = num % 10;
+
+            let wordForm = '';
+            if (h > 0) {
+                wordForm = hundreds[h];
+            }
+
+            if (t === 1) {
+                wordForm += (wordForm ? ' ' : '') + teens[o];
+            } else {
+                if (t > 0) {
+                    wordForm += (wordForm ? ' ' : '') + tens[t];
+                }
+                if (o > 0) {
+                    wordForm += (wordForm ? ' ' : '') + ones[o];
+                }
+            }
+
+            currentQuestions.q5 = {
+                number: num,
+                word: wordForm,
+                hundreds: h,
+                tens: t,
+                ones: o
+            };
+
+            document.getElementById('q5-word').textContent = wordForm;
+            document.getElementById('q5-standard').value = '';
+            document.getElementById('q5-expanded').value = '';
+        }
+
+        function checkQuestion5() {
+            const standard = document.getElementById('q5-standard').value.trim();
+            const expanded = document.getElementById('q5-expanded').value.trim().replace(/\s/g, '');
+            const feedback = document.getElementById('q5-feedback');
+
+            if (!standard || !expanded) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please complete both standard and expanded forms.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            const num = currentQuestions.q5.number;
+            const h = currentQuestions.q5.hundreds;
+            const t = currentQuestions.q5.tens;
+            const o = currentQuestions.q5.ones;
+
+            const correctExpanded = `${h * 100}+${t * 10}+${o}`.replace(/\s/g, '');
+            const standardCorrect = parseInt(standard) === num;
+            const expandedCorrect = expanded === correctExpanded;
+
+            if (standardCorrect && expandedCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${num} = ${h * 100} + ${t * 10} + ${o}`;
+            } else if (standardCorrect && !expandedCorrect) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Standard form is correct! But check your expanded form. It should be ${h * 100} + ${t * 10} + ${o}`;
+            } else if (!standardCorrect && expandedCorrect) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Expanded form is correct! But check your standard form.`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Both forms need correction. Try again!';
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 6: Subtraction
+        function generateQuestion6() {
+            const names = ['Mary', 'Emma', 'Sarah', 'Jake', 'Alex', 'Sophie'];
+            const activities = [
+                'playing arcade games',
+                'at the carnival',
+                'at the fair',
+                'playing games at the arcade',
+                'at the amusement park'
+            ];
+
+            const name = names[Math.floor(Math.random() * names.length)];
+            const activity = activities[Math.floor(Math.random() * activities.length)];
+            const num1 = randomNumber(300, 700);
+            const num2 = randomNumber(100, num1 - 50);
+            const correctAnswer = num1 - num2;
+
+            currentQuestions.q6 = {
+                num1: num1,
+                num2: num2,
+                answer: correctAnswer
+            };
+
+            document.getElementById('q6-text').textContent =
+                `${name} wins ${num1} tickets while ${activity}. She uses ${num2} tickets to get a prize. How many tickets does ${name} have left?`;
+
+            // Generate wrong answers
+            const wrongAnswers = [
+                num1 + num2,           // added instead of subtracted
+                correctAnswer + 100,   // common error
+                correctAnswer - 100    // common error
+            ];
+
+            const allAnswers = shuffle([
+                { value: correctAnswer, correct: true },
+                { value: wrongAnswers[0], correct: false },
+                { value: wrongAnswers[1], correct: false },
+                { value: wrongAnswers[2], correct: false }
+            ]);
+
+            const labels = ['a', 'b', 'c', 'd'];
+            allAnswers.forEach((ans, idx) => {
+                document.getElementById(`q6-label-${labels[idx]}`).textContent = ans.value;
+                document.getElementById(`q6-${labels[idx]}`).dataset.correct = ans.correct;
+            });
+        }
+
+        function checkQuestion6() {
+            const selected = document.querySelector('input[name="q6"]:checked');
+            const feedback = document.getElementById('q6-feedback');
+
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please select an answer.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            if (selected.dataset.correct === 'true') {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${currentQuestions.q6.num1} - ${currentQuestions.q6.num2} = ${currentQuestions.q6.answer}`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Not quite. Try subtracting ${currentQuestions.q6.num2} from ${currentQuestions.q6.num1}.`;
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 7: Expression Comparison
+        function generateQuestion7() {
+            const h = randomNumber(1, 9);
+            const t = randomNumber(0, 9);
+            const o = randomNumber(0, 9);
+
+            const leftNum = h * 100 + t * 10 + o;
+
+            // Randomly decide if expressions should be equal, greater than, or less than
+            const comparison = Math.floor(Math.random() * 3);
+            let rightNum;
+
+            if (comparison === 0) {
+                // Equal
+                rightNum = leftNum;
+            } else if (comparison === 1) {
+                // Left > Right
+                rightNum = leftNum - randomNumber(1, 50);
+            } else {
+                // Left < Right
+                rightNum = leftNum + randomNumber(1, 50);
+            }
+
+            const rh = Math.floor(rightNum / 100);
+            const rt = Math.floor((rightNum % 100) / 10);
+            const ro = rightNum % 10;
+
+            currentQuestions.q7 = {
+                leftNum: leftNum,
+                rightNum: rightNum,
+                answer: leftNum > rightNum ? '>' : leftNum < rightNum ? '<' : '='
+            };
+
+            // Create left expression by shuffling the parts
+            const leftParts = shuffle([h * 100, t * 10, o]);
+            document.getElementById('q7-left').textContent = `${leftParts[0]} + ${leftParts[1]} + ${leftParts[2]}`;
+
+            // Create right expression in word form
+            const wordParts = shuffle([
+                `${rh} hundreds`,
+                `${rt} tens`,
+                `${ro} ones`
+            ]);
+            document.getElementById('q7-right').textContent = wordParts.join(', ');
+
+            document.getElementById('q7-symbol').value = '';
+        }
+
+        function checkQuestion7() {
+            const selected = document.getElementById('q7-symbol').value;
+            const feedback = document.getElementById('q7-feedback');
+
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please select a comparison symbol.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            if (selected === currentQuestions.q7.answer) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${currentQuestions.q7.leftNum} ${currentQuestions.q7.answer} ${currentQuestions.q7.rightNum}`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Not quite. The left side equals ${currentQuestions.q7.leftNum} and the right side equals ${currentQuestions.q7.rightNum}.`;
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 8: Cafeteria Addition
+        function generateQuestion8() {
+            const milkTypes = [
+                ['chocolate milk', 'whole milk'],
+                ['strawberry milk', 'regular milk'],
+                ['vanilla milk', 'skim milk'],
+                ['chocolate milk', 'almond milk']
+            ];
+            const meals = ['breakfast', 'lunch', 'snack time'];
+
+            const milkPair = milkTypes[Math.floor(Math.random() * milkTypes.length)];
+            const meal = meals[Math.floor(Math.random() * meals.length)];
+            const num1 = randomNumber(150, 500);
+            const num2 = randomNumber(100, 400);
+            const correctAnswer = num1 + num2;
+
+            currentQuestions.q8 = {
+                num1: num1,
+                num2: num2,
+                answer: correctAnswer
+            };
+
+            document.getElementById('q8-text').textContent =
+                `At ${meal}, the school cafeteria sold ${num1} ${milkPair[0]} cartons and ${num2} ${milkPair[1]} cartons. How many milk cartons were sold at ${meal}?`;
+
+            // Generate wrong answers
+            const wrongAnswers = [
+                Math.abs(num1 - num2), // difference
+                correctAnswer + 100,    // too high
+                correctAnswer - 100     // too low
+            ];
+
+            const allAnswers = shuffle([
+                { value: correctAnswer, correct: true },
+                { value: wrongAnswers[0], correct: false },
+                { value: wrongAnswers[1], correct: false },
+                { value: wrongAnswers[2], correct: false }
+            ]);
+
+            const labels = ['a', 'b', 'c', 'd'];
+            allAnswers.forEach((ans, idx) => {
+                document.getElementById(`q8-label-${labels[idx]}`).textContent = ans.value;
+                document.getElementById(`q8-${labels[idx]}`).dataset.correct = ans.correct;
+            });
+        }
+
+        function checkQuestion8() {
+            const selected = document.querySelector('input[name="q8"]:checked');
+            const feedback = document.getElementById('q8-feedback');
+
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please select an answer.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            if (selected.dataset.correct === 'true') {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${currentQuestions.q8.num1} + ${currentQuestions.q8.num2} = ${currentQuestions.q8.answer}`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Not quite. Try adding ${currentQuestions.q8.num1} + ${currentQuestions.q8.num2} again.`;
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 9: Book Reading Contest
+        function generateQuestion9() {
+            const schools = ['Douglas Elementary School', 'Lincoln Elementary School', 'Roosevelt Elementary School', 'Kennedy Elementary School'];
+            const school = schools[Math.floor(Math.random() * schools.length)];
+
+            const secondGrade = randomNumber(150, 350);
+            const thirdGrade = randomNumber(200, 400);
+            const fourthGrade = randomNumber(300, 500);
+            const goal = randomNumber(400, 600);
+
+            // For Part A, pick two grades to compare
+            const grades = [
+                { name: 'Second', value: secondGrade },
+                { name: 'Third', value: thirdGrade },
+                { name: 'Fourth', value: fourthGrade }
+            ];
+
+            // Randomly select which grade to compare for Part B
+            const partBGradeIdx = Math.floor(Math.random() * 3);
+            const partBGrade = grades[partBGradeIdx];
+
+            // For Part A, select two different grades where one is higher
+            let grade1Idx = Math.floor(Math.random() * 3);
+            let grade2Idx = Math.floor(Math.random() * 3);
+            while (grade1Idx === grade2Idx) {
+                grade2Idx = Math.floor(Math.random() * 3);
+            }
+
+            // Make sure grade2 has higher value for "fewer" comparison
+            if (grades[grade1Idx].value > grades[grade2Idx].value) {
+                [grade1Idx, grade2Idx] = [grade2Idx, grade1Idx];
+            }
+
+            currentQuestions.q9 = {
+                second: secondGrade,
+                third: thirdGrade,
+                fourth: fourthGrade,
+                goal: goal,
+                partAAnswer: grades[grade2Idx].value - grades[grade1Idx].value,
+                partBAnswer: goal - partBGrade.value,
+                grade1: grades[grade1Idx].name,
+                grade2: grades[grade2Idx].name,
+                partBGrade: partBGrade.name
+            };
+
+            document.getElementById('q9-intro').textContent =
+                `${school} is having a book reading contest. Use the table to answer the questions.`;
+
+            document.getElementById('q9-second').textContent = secondGrade;
+            document.getElementById('q9-third').textContent = thirdGrade;
+            document.getElementById('q9-fourth').textContent = fourthGrade;
+
+            document.getElementById('q9-grade1').textContent = grades[grade1Idx].name + ' grade';
+            document.getElementById('q9-grade2').textContent = grades[grade2Idx].name + ' grade';
+            document.getElementById('q9-grade3').textContent = partBGrade.name + ' grade';
+            document.getElementById('q9-grade4').textContent = partBGrade.name.toLowerCase() + ' graders';
+            document.getElementById('q9-goal').textContent = goal;
+
+            document.getElementById('q9-partA').value = '';
+            document.getElementById('q9-partB').value = '';
+        }
+
+        function checkQuestion9() {
+            const partA = document.getElementById('q9-partA').value.trim();
+            const partB = document.getElementById('q9-partB').value.trim();
+            const feedback = document.getElementById('q9-feedback');
+
+            if (!partA || !partB) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please answer both Part A and Part B.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            const answerA = parseInt(partA);
+            const answerB = parseInt(partB);
+
+            if (answerA === currentQuestions.q9.partAAnswer && answerB === currentQuestions.q9.partBAnswer) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! Part A: ${currentQuestions.q9.partAAnswer} books, Part B: ${currentQuestions.q9.partBAnswer} books.`;
+            } else if (answerA !== currentQuestions.q9.partAAnswer && answerB === currentQuestions.q9.partBAnswer) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Part B is correct! But check Part A again.`;
+            } else if (answerA === currentQuestions.q9.partAAnswer && answerB !== currentQuestions.q9.partBAnswer) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Part A is correct! But check Part B again.`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Both answers need correction. Try again!';
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Question 10: Popcorn Sales
+        function generateQuestion10() {
+            const items = ['popcorn', 'candy bars', 'cookies', 'cupcakes'];
+            const grades = [
+                ['Kindergarten', 'first grade'],
+                ['First grade', 'second grade'],
+                ['Second grade', 'third grade']
+            ];
+
+            const item = items[Math.floor(Math.random() * items.length)];
+            const gradePair = grades[Math.floor(Math.random() * grades.length)];
+            const total = randomNumber(400, 900);
+            const num1 = randomNumber(150, total - 150);
+            const correctAnswer = total - num1;
+
+            currentQuestions.q10 = {
+                total: total,
+                num1: num1,
+                answer: correctAnswer
+            };
+
+            const itemUnit = item === 'popcorn' ? 'bags' : 'boxes';
+            document.getElementById('q10-text').textContent =
+                `${gradePair[0]} and ${gradePair[1]} students are competing to sell the most ${item}. In total, the ${gradePair[0].toLowerCase()} and ${gradePair[1]} students sold ${total} ${itemUnit} of ${item}. If the ${gradePair[0].toLowerCase()} students sold ${num1} ${itemUnit} of ${item}, how many ${itemUnit} did the ${gradePair[1]} students sell?`;
+
+            // Generate wrong answers
+            const wrongAnswers = [
+                correctAnswer - 125,   // common error
+                correctAnswer - 100,   // common error
+                total + num1           // added instead of subtracted
+            ];
+
+            const allAnswers = shuffle([
+                { value: correctAnswer, correct: true },
+                { value: wrongAnswers[0], correct: false },
+                { value: wrongAnswers[1], correct: false },
+                { value: wrongAnswers[2], correct: false }
+            ]);
+
+            const labels = ['a', 'b', 'c', 'd'];
+            allAnswers.forEach((ans, idx) => {
+                document.getElementById(`q10-label-${labels[idx]}`).textContent = `${ans.value} ${itemUnit} of ${item}`;
+                document.getElementById(`q10-${labels[idx]}`).dataset.correct = ans.correct;
+            });
+        }
+
+        function checkQuestion10() {
+            const selected = document.querySelector('input[name="q10"]:checked');
+            const feedback = document.getElementById('q10-feedback');
+
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Please select an answer.';
+                feedback.style.display = 'block';
+                return;
+            }
+
+            if (selected.dataset.correct === 'true') {
+                feedback.className = 'feedback correct';
+                feedback.textContent = `Correct! ${currentQuestions.q10.total} - ${currentQuestions.q10.num1} = ${currentQuestions.q10.answer}`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Not quite. Try subtracting ${currentQuestions.q10.num1} from ${currentQuestions.q10.total}.`;
+            }
+            feedback.style.display = 'block';
+        }
+
+        // Generate all questions
+        function generateNewQuestions() {
+            generateQuestion1();
+            generateQuestion2();
+            generateQuestion3();
+            generateQuestion4();
+            generateQuestion5();
+            generateQuestion6();
+            generateQuestion7();
+            generateQuestion8();
+            generateQuestion9();
+            generateQuestion10();
+
+            // Clear all feedback and selections
+            document.querySelectorAll('.feedback').forEach(f => f.style.display = 'none');
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            document.querySelectorAll('input[type="text"]').forEach(inp => inp.value = '');
+            document.getElementById('q3-comparison').value = '';
+            document.getElementById('q7-symbol').value = '';
+        }
+
+        // Generate initial questions on page load
+        window.onload = generateNewQuestions;
+    </script>
+</body>
+</html>
