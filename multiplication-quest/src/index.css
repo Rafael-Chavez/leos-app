@@ -1,73 +1,113 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;700&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  body {
-    @apply font-body text-on-surface bg-background;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-headline font-bold;
-  }
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  color: #1b1b1b;
+  background-color: #f9f9f9;
 }
 
-@layer components {
-  .btn {
-    @apply px-4 py-2 rounded-button font-semibold transition-all duration-200;
-  }
-
-  .btn-primary {
-    @apply btn bg-primary text-on-primary hover:scale-105 active:scale-95;
-  }
-
-  .btn-secondary {
-    @apply btn bg-secondary-container text-secondary hover:scale-105 active:scale-95;
-  }
-
-  .btn-success {
-    @apply btn bg-tertiary text-on-primary hover:scale-105 active:scale-95;
-  }
-
-  .card {
-    @apply bg-white rounded-card shadow-card p-6 transition-all duration-200;
-  }
-
-  .card-hover {
-    @apply card hover:shadow-card-hover hover:-translate-y-1 cursor-pointer;
-  }
-
-  .tactile-pattern {
-    background-color: #f9f9f9;
-    background-image: radial-gradient(#e2e2e2 1.5px, transparent 1.5px);
-    background-size: 32px 32px;
-  }
-
-  .input-field {
-    @apply px-4 py-2 border-2 border-gray-300 rounded-button focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all;
-  }
-
-  .progress-bar {
-    @apply h-4 bg-gray-200 rounded-full overflow-hidden;
-  }
-
-  .progress-fill {
-    @apply h-full bg-gradient-to-r from-primary to-tertiary transition-all duration-500 ease-out;
-  }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: bold;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.tactile-pattern {
+  background-color: #f9f9f9;
+  background-image: radial-gradient(#e2e2e2 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #0061a4;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  background-color: #ffdf9e;
+  color: #785900;
+}
+
+.btn-secondary:hover {
+  transform: scale(1.05);
+}
+
+.btn-success {
+  background-color: #006e1c;
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  transform: scale(1.05);
+}
+
+.card {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+
+.card-hover {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+}
+
+.input-field {
+  padding: 0.5rem 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0061a4;
+  box-shadow: 0 0 0 3px rgba(0, 97, 164, 0.1);
+}
+
+.progress-bar {
+  height: 1rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, #0061a4, #006e1c);
+  transition: width 0.5s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
