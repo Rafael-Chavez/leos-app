@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slope-Intercept Form - Leo's Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+        }
+
+        .learn-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .practice-btn {
+            background: #2196F3;
+            color: white;
+        }
+
+        .home-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .concept-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .formula {
+            background: #fff9e6;
+            border: 3px solid #ffd700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .example-box {
+            background: #e8f5e9;
+            border: 2px solid #4CAF50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .problem-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .problem-number {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .input-box {
+            padding: 10px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px 5px;
+            width: 200px;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .check-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .check-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .show-answer-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 2px solid #4CAF50;
+        }
+
+        .incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .answer-display {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .graph-canvas {
+            border: 2px solid #333;
+            margin: 20px 0;
+            display: block;
+            background: white;
+        }
+
+        .hint-box {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        ul {
+            margin-left: 30px;
+            line-height: 1.8;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .score-display {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Slope-Intercept Form</h1>
+
+        <div class="nav-buttons">
+            <button class="nav-btn learn-btn" onclick="showSection('learn')">📚 Learn</button>
+            <button class="nav-btn practice-btn" onclick="showSection('practice')">✏️ Practice</button>
+            <button class="nav-btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+        </div>
+
+        <!-- LEARNING SECTION -->
+        <div id="learn" class="section active">
+            <h2>📚 Learning: Slope-Intercept Form</h2>
+
+            <div class="formula">
+                y = mx + b
+            </div>
+
+            <div class="concept-box">
+                <h3>What does each part mean?</h3>
+                <ul>
+                    <li><strong>y</strong> = the y-coordinate (up and down)</li>
+                    <li><strong>m</strong> = the slope (how steep the line is)</li>
+                    <li><strong>x</strong> = the x-coordinate (left and right)</li>
+                    <li><strong>b</strong> = the y-intercept (where the line crosses the y-axis)</li>
+                </ul>
+            </div>
+
+            <h3>Understanding Slope (m)</h3>
+            <div class="concept-box">
+                <p>The <strong>slope</strong> tells you how steep the line is and which direction it goes:</p>
+                <ul>
+                    <li><strong>Positive slope</strong> (like m = 2): The line goes UP from left to right ↗️</li>
+                    <li><strong>Negative slope</strong> (like m = -3): The line goes DOWN from left to right ↘️</li>
+                    <li><strong>Zero slope</strong> (m = 0): The line is horizontal (flat) →</li>
+                    <li><strong>Undefined slope</strong>: The line is vertical ↑</li>
+                </ul>
+                <p>The slope is the "rise over run" = <strong>change in y / change in x</strong></p>
+            </div>
+
+            <h3>Understanding Y-Intercept (b)</h3>
+            <div class="concept-box">
+                <p>The <strong>y-intercept</strong> is where the line crosses the y-axis (the vertical line).</p>
+                <ul>
+                    <li>This happens when x = 0</li>
+                    <li>If b = 3, the line crosses the y-axis at point (0, 3)</li>
+                    <li>If b = -2, the line crosses the y-axis at point (0, -2)</li>
+                </ul>
+            </div>
+
+            <h3>Example 1: Writing an Equation from Slope and Y-Intercept</h3>
+            <div class="example-box">
+                <p><strong>Problem:</strong> Write the equation of a line with slope = 2 and y-intercept = -3</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Start with y = mx + b</li>
+                    <li>m = 2 (the slope)</li>
+                    <li>b = -3 (the y-intercept)</li>
+                    <li>Substitute: y = 2x + (-3)</li>
+                    <li><strong>Answer: y = 2x - 3</strong></li>
+                </ul>
+            </div>
+
+            <h3>Example 2: Finding Slope and Y-Intercept from an Equation</h3>
+            <div class="example-box">
+                <p><strong>Problem:</strong> Find the slope and y-intercept of y = -4x + 7</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Compare to y = mx + b</li>
+                    <li>The number with x is the slope: <strong>m = -4</strong></li>
+                    <li>The number by itself is the y-intercept: <strong>b = 7</strong></li>
+                </ul>
+            </div>
+
+            <h3>Example 3: Rewriting to Slope-Intercept Form</h3>
+            <div class="example-box">
+                <p><strong>Problem:</strong> Rewrite 2x + y = 6 in slope-intercept form</p>
+                <p><strong>Solution:</strong></p>
+                <ul>
+                    <li>Goal: Get y by itself on one side</li>
+                    <li>2x + y = 6</li>
+                    <li>Subtract 2x from both sides: y = -2x + 6</li>
+                    <li><strong>Answer: y = -2x + 6</strong> (slope = -2, y-intercept = 6)</li>
+                </ul>
+            </div>
+
+            <h3>Example 4: Finding Equation from a Graph</h3>
+            <div class="example-box">
+                <p><strong>Steps to find the equation from a graph:</strong></p>
+                <ol>
+                    <li><strong>Find the y-intercept (b):</strong> Look where the line crosses the y-axis</li>
+                    <li><strong>Find the slope (m):</strong> Pick two points on the line and count:
+                        <ul>
+                            <li>Rise = how many units up or down</li>
+                            <li>Run = how many units left or right</li>
+                            <li>Slope = rise / run</li>
+                        </ul>
+                    </li>
+                    <li><strong>Write the equation:</strong> y = mx + b</li>
+                </ol>
+                <p><strong>Example:</strong> If a line crosses the y-axis at 4, and from there goes up 3 and right 2 to the next point:</p>
+                <ul>
+                    <li>b = 4 (y-intercept)</li>
+                    <li>m = 3/2 (rise/run = 3/2)</li>
+                    <li><strong>Answer: y = (3/2)x + 4 or y = 1.5x + 4</strong></li>
+                </ul>
+            </div>
+
+            <div class="hint-box">
+                <h3>💡 Quick Tips:</h3>
+                <ul>
+                    <li>Always get y by itself on the left side</li>
+                    <li>The number with x is ALWAYS the slope</li>
+                    <li>The number without x is ALWAYS the y-intercept</li>
+                    <li>Use fractions or decimals for slope</li>
+                    <li>When counting slope on a graph, always go from left to right</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PRACTICE SECTION -->
+        <div id="practice" class="section">
+            <h2>✏️ Practice Problems</h2>
+            <div class="score-display" id="scoreDisplay">Score: 0 / 0</div>
+
+            <h3>Section 1: Write the Equation from Slope and Y-Intercept</h3>
+            <p>Write the slope-intercept form equation (y = mx + b) for each line:</p>
+
+            <div class="problem-card">
+                <span class="problem-number">1</span>
+                <strong>Slope = 3, Y-intercept = 5</strong><br>
+                <input type="text" class="input-box" id="q1" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(1, '3x+5', 'y = 3x + 5')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(1, 'y = 3x + 5')">Show Answer</button>
+                <div class="feedback" id="feedback1"></div>
+                <div class="answer-display" id="answer1"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">2</span>
+                <strong>Slope = -2, Y-intercept = 7</strong><br>
+                <input type="text" class="input-box" id="q2" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(2, '-2x+7', 'y = -2x + 7')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(2, 'y = -2x + 7')">Show Answer</button>
+                <div class="feedback" id="feedback2"></div>
+                <div class="answer-display" id="answer2"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">3</span>
+                <strong>Slope = 1/2, Y-intercept = -4</strong><br>
+                <input type="text" class="input-box" id="q3" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(3, '(1/2)x-4', 'y = (1/2)x - 4 or y = 0.5x - 4')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(3, 'y = (1/2)x - 4 or y = 0.5x - 4')">Show Answer</button>
+                <div class="feedback" id="feedback3"></div>
+                <div class="answer-display" id="answer3"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">4</span>
+                <strong>Slope = -3/4, Y-intercept = 2</strong><br>
+                <input type="text" class="input-box" id="q4" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(4, '(-3/4)x+2', 'y = (-3/4)x + 2 or y = -0.75x + 2')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(4, 'y = (-3/4)x + 2 or y = -0.75x + 2')">Show Answer</button>
+                <div class="feedback" id="feedback4"></div>
+                <div class="answer-display" id="answer4"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">5</span>
+                <strong>Slope = 0, Y-intercept = -3</strong><br>
+                <input type="text" class="input-box" id="q5" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(5, '0x-3', 'y = -3 or y = 0x - 3')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(5, 'y = -3 or y = 0x - 3')">Show Answer</button>
+                <div class="feedback" id="feedback5"></div>
+                <div class="answer-display" id="answer5"></div>
+            </div>
+
+            <h3>Section 2: Find the Slope and Y-Intercept</h3>
+            <p>For each equation, identify the slope (m) and y-intercept (b):</p>
+
+            <div class="problem-card">
+                <span class="problem-number">6</span>
+                <strong>y = 4x - 6</strong><br>
+                Slope (m): <input type="text" class="input-box" id="q6a" placeholder="m = ?" style="width: 100px;">
+                Y-intercept (b): <input type="text" class="input-box" id="q6b" placeholder="b = ?" style="width: 100px;">
+                <button class="check-btn" onclick="checkTwoParts(6, '4', '-6', 'Slope = 4, Y-intercept = -6')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(6, 'Slope (m) = 4, Y-intercept (b) = -6')">Show Answer</button>
+                <div class="feedback" id="feedback6"></div>
+                <div class="answer-display" id="answer6"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">7</span>
+                <strong>y = -x + 9</strong><br>
+                Slope (m): <input type="text" class="input-box" id="q7a" placeholder="m = ?" style="width: 100px;">
+                Y-intercept (b): <input type="text" class="input-box" id="q7b" placeholder="b = ?" style="width: 100px;">
+                <button class="check-btn" onclick="checkTwoParts(7, '-1', '9', 'Slope = -1, Y-intercept = 9')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(7, 'Slope (m) = -1, Y-intercept (b) = 9')">Show Answer</button>
+                <div class="feedback" id="feedback7"></div>
+                <div class="answer-display" id="answer7"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">8</span>
+                <strong>y = (2/3)x + 1</strong><br>
+                Slope (m): <input type="text" class="input-box" id="q8a" placeholder="m = ?" style="width: 100px;">
+                Y-intercept (b): <input type="text" class="input-box" id="q8b" placeholder="b = ?" style="width: 100px;">
+                <button class="check-btn" onclick="checkTwoParts(8, '2/3', '1', 'Slope = 2/3, Y-intercept = 1')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(8, 'Slope (m) = 2/3, Y-intercept (b) = 1')">Show Answer</button>
+                <div class="feedback" id="feedback8"></div>
+                <div class="answer-display" id="answer8"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">9</span>
+                <strong>y = -5x</strong><br>
+                Slope (m): <input type="text" class="input-box" id="q9a" placeholder="m = ?" style="width: 100px;">
+                Y-intercept (b): <input type="text" class="input-box" id="q9b" placeholder="b = ?" style="width: 100px;">
+                <button class="check-btn" onclick="checkTwoParts(9, '-5', '0', 'Slope = -5, Y-intercept = 0')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(9, 'Slope (m) = -5, Y-intercept (b) = 0')">Show Answer</button>
+                <div class="feedback" id="feedback9"></div>
+                <div class="answer-display" id="answer9"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">10</span>
+                <strong>y = 8</strong><br>
+                Slope (m): <input type="text" class="input-box" id="q10a" placeholder="m = ?" style="width: 100px;">
+                Y-intercept (b): <input type="text" class="input-box" id="q10b" placeholder="b = ?" style="width: 100px;">
+                <button class="check-btn" onclick="checkTwoParts(10, '0', '8', 'Slope = 0, Y-intercept = 8')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(10, 'Slope (m) = 0, Y-intercept (b) = 8')">Show Answer</button>
+                <div class="feedback" id="feedback10"></div>
+                <div class="answer-display" id="answer10"></div>
+            </div>
+
+            <h3>Section 3: Rewrite in Slope-Intercept Form</h3>
+            <p>Rewrite each equation in slope-intercept form (y = mx + b), then identify the slope:</p>
+
+            <div class="problem-card">
+                <span class="problem-number">11</span>
+                <strong>3x + y = 10</strong><br>
+                Equation: <input type="text" class="input-box" id="q11" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(11, '-3x+10', 'y = -3x + 10 (slope = -3)')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(11, 'y = -3x + 10 (slope = -3)')">Show Answer</button>
+                <div class="feedback" id="feedback11"></div>
+                <div class="answer-display" id="answer11"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">12</span>
+                <strong>2x - y = 4</strong><br>
+                Equation: <input type="text" class="input-box" id="q12" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(12, '2x-4', 'y = 2x - 4 (slope = 2)')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(12, 'y = 2x - 4 (slope = 2)')">Show Answer</button>
+                <div class="feedback" id="feedback12"></div>
+                <div class="answer-display" id="answer12"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">13</span>
+                <strong>4x + 2y = 12</strong><br>
+                Equation: <input type="text" class="input-box" id="q13" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(13, '-2x+6', 'y = -2x + 6 (slope = -2)')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(13, 'y = -2x + 6 (slope = -2)')">Show Answer</button>
+                <div class="feedback" id="feedback13"></div>
+                <div class="answer-display" id="answer13"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">14</span>
+                <strong>x - y = -5</strong><br>
+                Equation: <input type="text" class="input-box" id="q14" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(14, 'x+5', 'y = x + 5 (slope = 1)')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(14, 'y = x + 5 (slope = 1)')">Show Answer</button>
+                <div class="feedback" id="feedback14"></div>
+                <div class="answer-display" id="answer14"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">15</span>
+                <strong>6x + 3y = 9</strong><br>
+                Equation: <input type="text" class="input-box" id="q15" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(15, '-2x+3', 'y = -2x + 3 (slope = -2)')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(15, 'y = -2x + 3 (slope = -2)')">Show Answer</button>
+                <div class="feedback" id="feedback15"></div>
+                <div class="answer-display" id="answer15"></div>
+            </div>
+
+            <h3>Section 4: Graphing Practice</h3>
+            <p>Look at each graph description and write the equation in slope-intercept form:</p>
+
+            <div class="problem-card">
+                <span class="problem-number">16</span>
+                <strong>A line crosses the y-axis at 3 and has a slope of 2</strong><br>
+                <input type="text" class="input-box" id="q16" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(16, '2x+3', 'y = 2x + 3')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(16, 'y = 2x + 3')">Show Answer</button>
+                <div class="feedback" id="feedback16"></div>
+                <div class="answer-display" id="answer16"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">17</span>
+                <strong>A line crosses the y-axis at -2 and has a slope of -1</strong><br>
+                <input type="text" class="input-box" id="q17" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(17, '-x-2', 'y = -x - 2 or y = -1x - 2')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(17, 'y = -x - 2 or y = -1x - 2')">Show Answer</button>
+                <div class="feedback" id="feedback17"></div>
+                <div class="answer-display" id="answer17"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">18</span>
+                <strong>A line passes through (0, 5) and (2, 9)</strong><br>
+                <em>Hint: Find slope first: (9-5)/(2-0) = 4/2 = 2, and y-intercept is 5</em><br>
+                <input type="text" class="input-box" id="q18" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(18, '2x+5', 'y = 2x + 5')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(18, 'y = 2x + 5')">Show Answer</button>
+                <div class="feedback" id="feedback18"></div>
+                <div class="answer-display" id="answer18"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">19</span>
+                <strong>A line passes through (0, -1) and (3, 5)</strong><br>
+                <em>Hint: Find slope first: (5-(-1))/(3-0) = 6/3 = 2, and y-intercept is -1</em><br>
+                <input type="text" class="input-box" id="q19" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(19, '2x-1', 'y = 2x - 1')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(19, 'y = 2x - 1')">Show Answer</button>
+                <div class="feedback" id="feedback19"></div>
+                <div class="answer-display" id="answer19"></div>
+            </div>
+
+            <div class="problem-card">
+                <span class="problem-number">20</span>
+                <strong>A horizontal line passing through y = 4</strong><br>
+                <em>Hint: Horizontal lines have slope = 0</em><br>
+                <input type="text" class="input-box" id="q20" placeholder="y = ...">
+                <button class="check-btn" onclick="checkAnswer(20, '4', 'y = 4')">Check</button>
+                <button class="show-answer-btn" onclick="showAnswer(20, 'y = 4')">Show Answer</button>
+                <div class="feedback" id="feedback20"></div>
+                <div class="answer-display" id="answer20"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let attempted = 0;
+        const answeredQuestions = new Set();
+
+        function showSection(sectionName) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionName).classList.add('active');
+        }
+
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/y=/g, '')
+                .replace(/\*/g, '')
+                .replace(/\(\)/g, '')
+                .replace(/\+\-/g, '-')
+                .replace(/--/g, '+');
+        }
+
+        function checkAnswer(questionNum, correctAnswer, displayAnswer) {
+            const userAnswer = document.getElementById('q' + questionNum).value;
+            const feedback = document.getElementById('feedback' + questionNum);
+
+            const normalizedUser = normalizeAnswer(userAnswer);
+            const normalizedCorrect = normalizeAnswer(correctAnswer);
+
+            // Also check alternative forms
+            const alternatives = correctAnswer.split('or').map(alt => normalizeAnswer(alt));
+            const isCorrect = alternatives.some(alt => normalizedUser === alt);
+
+            if (!answeredQuestions.has(questionNum)) {
+                attempted++;
+                answeredQuestions.add(questionNum);
+            }
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! Great job!';
+                feedback.style.display = 'block';
+                if (!answeredQuestions.has(questionNum + '_scored')) {
+                    score++;
+                    answeredQuestions.add(questionNum + '_scored');
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '✗ Not quite. Try again or click "Show Answer" for help.';
+                feedback.style.display = 'block';
+            }
+
+            updateScore();
+        }
+
+        function checkTwoParts(questionNum, correctA, correctB, displayAnswer) {
+            const userA = document.getElementById('q' + questionNum + 'a').value.trim();
+            const userB = document.getElementById('q' + questionNum + 'b').value.trim();
+            const feedback = document.getElementById('feedback' + questionNum);
+
+            if (!answeredQuestions.has(questionNum)) {
+                attempted++;
+                answeredQuestions.add(questionNum);
+            }
+
+            const normalizedA = normalizeAnswer(userA);
+            const normalizedCorrectA = normalizeAnswer(correctA);
+            const normalizedB = normalizeAnswer(userB);
+            const normalizedCorrectB = normalizeAnswer(correctB);
+
+            if (normalizedA === normalizedCorrectA && normalizedB === normalizedCorrectB) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! Great job!';
+                feedback.style.display = 'block';
+                if (!answeredQuestions.has(questionNum + '_scored')) {
+                    score++;
+                    answeredQuestions.add(questionNum + '_scored');
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                let hint = '';
+                if (normalizedA !== normalizedCorrectA && normalizedB !== normalizedCorrectB) {
+                    hint = ' Both values need adjustment.';
+                } else if (normalizedA !== normalizedCorrectA) {
+                    hint = ' The slope needs adjustment.';
+                } else {
+                    hint = ' The y-intercept needs adjustment.';
+                }
+                feedback.textContent = '✗ Not quite.' + hint + ' Try again or click "Show Answer".';
+                feedback.style.display = 'block';
+            }
+
+            updateScore();
+        }
+
+        function showAnswer(questionNum, answer) {
+            const answerDiv = document.getElementById('answer' + questionNum);
+            answerDiv.textContent = '📘 Answer: ' + answer;
+            answerDiv.style.display = 'block';
+        }
+
+        function updateScore() {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.textContent = `Score: ${score} / ${attempted}`;
+        }
+    </script>
+</body>
+</html>
