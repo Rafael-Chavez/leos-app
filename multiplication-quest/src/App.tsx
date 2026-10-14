@@ -1,122 +1,104 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import { loadData, saveData } from './services/persistence/storage';
+import type { StorageSchema } from './types';
+import Dashboard from './features/dashboard/Dashboard';
+import StudyGuide from './features/study-guide/StudyGuide';
+import Practice from './features/practice/Practice';
+import TestCenter from './features/test-center/TestCenter';
+import Adventure from './features/adventure/Adventure';
+import ParentDashboard from './features/parent-dashboard/ParentDashboard';
+import Navigation from './components/layout/Navigation';
+
+type View = 'dashboard' | 'study' | 'practice' | 'test' | 'adventure' | 'parent' | 'settings';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentView, setCurrentView] = useState<View>('dashboard');
+  const [appData, setAppData] = useState<StorageSchema>(loadData());
+
+  const navigate = (view: string) => {
+    setCurrentView(view as View);
+  };
+
+  // Save data whenever it changes
+  useEffect(() => {
+    saveData(appData);
+  }, [appData]);
+
+  // Update last active date
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const lastActive = appData.student.lastActiveDate?.split('T')[0];
+
+    if (today !== lastActive) {
+      setAppData(prev => ({
+        ...prev,
+        student: {
+          ...prev.student,
+          lastActiveDate: new Date().toISOString(),
+        },
+      }));
+    }
+  }, []);
+
+  const updateAppData = (updates: Partial<StorageSchema>) => {
+    setAppData(prev => ({ ...prev, ...updates }));
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen tactile-pattern">
+      <Navigation currentView={currentView} onNavigate={navigate} studentName={appData.student.displayName} />
 
-      <div className="ticks"></div>
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
+        {currentView === 'dashboard' && (
+          <Dashboard
+            data={appData}
+            onNavigate={navigate}
+            onUpdateData={updateAppData}
+          />
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {currentView === 'study' && (
+          <StudyGuide
+            data={appData}
+            onUpdateData={updateAppData}
+            onNavigate={navigate}
+          />
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {currentView === 'practice' && (
+          <Practice
+            data={appData}
+            onUpdateData={updateAppData}
+            onNavigate={navigate}
+          />
+        )}
+
+        {currentView === 'test' && (
+          <TestCenter
+            data={appData}
+            onUpdateData={updateAppData}
+            onNavigate={navigate}
+          />
+        )}
+
+        {currentView === 'adventure' && (
+          <Adventure
+            data={appData}
+            onUpdateData={updateAppData}
+            onNavigate={navigate}
+          />
+        )}
+
+        {currentView === 'parent' && (
+          <ParentDashboard
+            data={appData}
+            onUpdateData={updateAppData}
+            onNavigate={navigate}
+          />
+        )}
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
